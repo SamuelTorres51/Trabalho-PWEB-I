@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Style - Agendamento Online</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-cut"></i>
+                    <span>Barbearia Style</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Início</a></li>
+                    <li><a href="#services" class="nav-link">Serviços</a></li>
+                    <li><a href="#booking" class="nav-link">Agendar</a></li>
+                    <li><a href="#contact" class="nav-link">Contato</a></li>
+                    <li><a href="admin-login.html" class="nav-link admin-link">Admin</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Barbearia Style</h1>
+            <p>Seu estilo, nossa paixão. Agende seu horário online!</p>
+            <a href="#booking" class="cta-button">Agendar Agora</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2>Nossos Serviços</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <i class="fas fa-cut"></i>
+                    <h3>Corte Masculino</h3>
+                    <p>Corte moderno e estiloso</p>
+                    <span class="price">R$ 25,00</span>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-scissors"></i>
+                    <h3>Barba</h3>
+                    <p>Modelagem e aparar barba</p>
+                    <span class="price">R$ 15,00</span>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-spa"></i>
+                    <h3>Corte + Barba</h3>
+                    <p>Pacote completo</p>
+                    <span class="price">R$ 35,00</span>
+                </div>
+                <div class="service-card">
+                    <i class="fas fa-magic"></i>
+                    <h3>Sobrancelha</h3>
+                    <p>Design e limpeza</p>
+                    <span class="price">R$ 10,00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="booking-section">
+        <div class="container">
+            <h2>Agendar Horário</h2>
+            
+            <!-- Step 1: Calendar -->
+            <div id="step-calendar" class="booking-step active">
+                <h3>1. Escolha a Data</h3>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <h4>Janeiro 2024</h4>
+                        <button class="calendar-nav">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="calendar-grid">
+                        <div class="calendar-day-header">Dom</div>
+                        <div class="calendar-day-header">Seg</div>
+                        <div class="calendar-day-header">Ter</div>
+                        <div class="calendar-day-header">Qua</div>
+                        <div class="calendar-day-header">Qui</div>
+                        <div class="calendar-day-header">Sex</div>
+                        <div class="calendar-day-header">Sáb</div>
+                        
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day">1</div>
+                        
+                        <div class="calendar-day">2</div>
+                        <div class="calendar-day">3</div>
+                        <div class="calendar-day">4</div>
+                        <div class="calendar-day">5</div>
+                        <div class="calendar-day">6</div>
+                        <div class="calendar-day">7</div>
+                        <div class="calendar-day">8</div>
+                        
+                        <div class="calendar-day">9</div>
+                        <div class="calendar-day">10</div>
+                        <div class="calendar-day">11</div>
+                        <div class="calendar-day">12</div>
+                        <div class="calendar-day">13</div>
+                        <div class="calendar-day">14</div>
+                        <div class="calendar-day">15</div>
+                        
+                        <div class="calendar-day">16</div>
+                        <div class="calendar-day">17</div>
+                        <div class="calendar-day">18</div>
+                        <div class="calendar-day">19</div>
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-day">21</div>
+                        <div class="calendar-day">22</div>
+                        
+                        <div class="calendar-day">23</div>
+                        <div class="calendar-day">24</div>
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-day">26</div>
+                        <div class="calendar-day">27</div>
+                        <div class="calendar-day">28</div>
+                        <div class="calendar-day">29</div>
+                        
+                        <div class="calendar-day">30</div>
+                        <div class="calendar-day">31</div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                        <div class="calendar-day empty"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Time Selection -->
+            <div id="step-time" class="booking-step">
+                <h3>2. Escolha o Horário</h3>
+                <div class="selected-date-info">
+                    <p>Data selecionada: <span>Segunda-feira, 15 de janeiro de 2024</span></p>
+                </div>
+                <div class="time-slots-container">
+                    <h4>Horários Disponíveis</h4>
+                    <div class="time-slots">
+                        <div class="time-slot">08:00</div>
+                        <div class="time-slot unavailable">08:30</div>
+                        <div class="time-slot">09:00</div>
+                        <div class="time-slot">09:30</div>
+                        <div class="time-slot">10:00</div>
+                        <div class="time-slot unavailable">10:30</div>
+                        <div class="time-slot">11:00</div>
+                        <div class="time-slot">11:30</div>
+                        <div class="time-slot">14:00</div>
+                        <div class="time-slot">14:30</div>
+                        <div class="time-slot">15:00</div>
+                        <div class="time-slot">15:30</div>
+                        <div class="time-slot">16:00</div>
+                        <div class="time-slot">16:30</div>
+                        <div class="time-slot">17:00</div>
+                        <div class="time-slot">17:30</div>
+                    </div>
+                </div>
+                <div class="step-navigation">
+                    <button class="btn-secondary">Voltar</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Service Selection and Final Details -->
+            <div id="step-service" class="booking-step">
+                <h3>3. Escolha o Serviço, Barbeiro e Confirme</h3>
+                <div class="selected-info">
+                    <p><strong>Data:</strong> <span>Segunda-feira, 15 de janeiro de 2024</span></p>
+                    <p><strong>Horário:</strong> <span>14:30</span></p>
+                </div>
+                
+                <form id="bookingForm" class="form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="service">Serviço</label>
+                            <select id="service" name="service" required>
+                                <option value="">Selecione um serviço</option>
+                                <option value="corte">Corte Masculino - R$ 25,00</option>
+                                <option value="barba">Barba - R$ 15,00</option>
+                                <option value="corte-barba">Corte + Barba - R$ 35,00</option>
+                                <option value="sobrancelha">Sobrancelha - R$ 10,00</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="barber">Barbeiro</label>
+                            <select id="barber" name="barber" required>
+                                <option value="">Selecione um barbeiro</option>
+                                <option value="joao">João Silva</option>
+                                <option value="pedro">Pedro Santos</option>
+                                <option value="carlos">Carlos Oliveira</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">Nome do Cliente</label>
+                            <input type="text" id="clientName" name="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPhone">Telefone</label>
+                            <input type="tel" id="clientPhone" name="clientPhone" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Observações (opcional)</label>
+                        <textarea id="notes" name="notes" rows="3" placeholder="Alguma observação especial..."></textarea>
+                    </div>
+
+                    <div class="step-navigation">
+                        <button type="button" class="btn-secondary">Voltar</button>
+                        <button type="submit" class="submit-btn">Confirmar Agendamento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Contato</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <h3>Endereço</h3>
+                        <p>Rua das Flores, 123<br>Centro - São Paulo/SP</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <div>
+                        <h3>Telefone</h3>
+                        <p>(11) 99999-9999</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <h3>Horário de Funcionamento</h3>
+                        <p>Seg - Sex: 8h às 18h<br>Sáb: 8h às 16h</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Barbearia Style. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
