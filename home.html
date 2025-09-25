@@ -13,15 +13,20 @@
         <nav class="navbar">
             <div class="nav-container">
                 <div class="logo">
-                    <i class="fas fa-cut"></i>
-                    <span>Barbearia Style</span>
+                    <div class="greeting">
+                        <span class="greeting-text" id="greeting">Bom dia</span>
+                        <span class="user-name" id="userName">João Silva</span>
+                    </div>
+                    <div class="logo-content">
+                        <i class="fas fa-cut"></i>
+                        <span>Barbearia Style</span>
+                    </div>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="#home" class="nav-link">Início</a></li>
                     <li><a href="#services" class="nav-link">Serviços</a></li>
                     <li><a href="#booking" class="nav-link">Agendar</a></li>
                     <li><a href="#contact" class="nav-link">Contato</a></li>
-                    <li><a href="admin-login.html" class="nav-link admin-link">Admin</a></li>
                 </ul>
                 <div class="hamburger">
                     <span class="bar"></span>
@@ -215,16 +220,6 @@
                         </div>
                     </div>
 
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="clientName">Nome do Cliente</label>
-                            <input type="text" id="clientName" name="clientName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="clientPhone">Telefone</label>
-                            <input type="tel" id="clientPhone" name="clientPhone" required>
-                        </div>
-                    </div>
 
                     <div class="form-group">
                         <label for="notes">Observações (opcional)</label>
@@ -277,5 +272,26 @@
         </div>
     </footer>
 
+    <script>
+        // Simple greeting based on time of day
+        function updateGreeting() {
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = '';
+            
+            if (hour >= 5 && hour < 12) {
+                greeting = 'Bom dia';
+            } else if (hour >= 12 && hour < 18) {
+                greeting = 'Boa tarde';
+            } else {
+                greeting = 'Boa noite';
+            }
+            
+            document.getElementById('greeting').textContent = greeting;
+        }
+        
+        // Update greeting when page loads
+        updateGreeting();
+    </script>
 </body>
 </html>
