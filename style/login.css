@@ -4,26 +4,65 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 30%, #e9ecef 70%, #dee2e6 100%);
     padding: 2rem 0;
     margin-top: 80px;
+    position: relative;
+}
+
+.main-login-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(233, 236, 239, 0.9));
+    z-index: 1;
+}
+
+.main-login-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(231, 76, 60, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(52, 152, 219, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(108, 117, 125, 0.06) 0%, transparent 50%);
+    z-index: 1;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+.main-login-section > * {
+    position: relative;
+    z-index: 2;
 }
 
 .welcome-header {
     text-align: center;
     margin-bottom: 2rem;
-    color: white;
+    color: #2c3e50;
 }
 
 .welcome-header h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    color: #2c3e50;
 }
 
 .welcome-header p {
     font-size: 1.2rem;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    color: #34495e;
 }
 
 /* Tabs */
@@ -31,15 +70,17 @@
     display: flex;
     justify-content: center;
     margin-bottom: 2rem;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.8);
     border-radius: 50px;
-    padding: 5px;
-    /* backdrop-filter: blur(10px); - Removido para melhor performance */
+    padding: 6px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(231, 76, 60, 0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
 }
 
 .tab-button {
     background: transparent;
-    color: white;
+    color: #2c3e50;
     border: none;
     padding: 12px 30px;
     border-radius: 50px;
@@ -50,13 +91,14 @@
 }
 
 .tab-button.active {
-    background: white;
-    color: #667eea;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    background: #e74c3c;
+    color: white;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
 }
 
 .tab-button:hover:not(.active) {
-    background: rgba(255,255,255,0.2);
+    background: rgba(231, 76, 60, 0.2);
+    color: #2c3e50;
 }
 
 /* Tab Content */
@@ -73,9 +115,30 @@
     background: white;
     padding: 2.5rem;
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
     max-width: 500px;
     margin: 0 auto;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-card::before, .cadastro-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #e74c3c, #f39c12, #e74c3c);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
 }
 
 .cadastro-card {
@@ -110,7 +173,7 @@
 /* Cadastro Button */
 .cadastro-btn {
     width: 100%;
-    background: #27ae60;
+    background: linear-gradient(135deg, #27ae60, #229954);
     color: white;
     padding: 15px;
     border: none;
@@ -123,12 +186,29 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.cadastro-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.cadastro-btn:hover::before {
+    left: 100%;
 }
 
 .cadastro-btn:hover {
-    background: #229954;
-    transform: translate3d(0, -2px, 0); /* Usa translate3d para aceleração de hardware */
-    box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    background: linear-gradient(135deg, #229954, #1e8449);
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
 }
 
 /* Login Page Styles */
@@ -137,7 +217,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 30%, #e9ecef 70%, #dee2e6 100%);
     padding: 2rem 0;
     margin-top: 80px;
 }
@@ -240,7 +320,7 @@
 
 .login-btn {
     width: 100%;
-    background: #e74c3c;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
     color: white;
     padding: 15px;
     border: none;
@@ -253,12 +333,29 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.login-btn:hover::before {
+    left: 100%;
 }
 
 .login-btn:hover {
-    background: #c0392b;
-    transform: translate3d(0, -2px, 0); /* Usa translate3d para aceleração de hardware */
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+    background: linear-gradient(135deg, #c0392b, #a93226);
+    transform: translate3d(0, -3px, 0);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
 }
 
 .login-footer {
