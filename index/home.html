@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barbearia Style - Agendamento Online</title>
+    <!-- <link rel="icon" href="/path/to/favicon.ico" type="image/x-icon">  COLOCAR ICONE-->
     <link rel="stylesheet" href="/style/common.css">
     <link rel="stylesheet" href="/style/home.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -15,7 +16,17 @@
             <div class="nav-container">
                 <div class="logo">
                     <div class="greeting">
-                        <span class="greeting-text" id="greeting">Bom dia</span>
+                        <div class="user-dropdown">
+                            <button class="user-btn">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="#editar-perfil">Editar Perfil</a>
+                                <a href="#alterar-senha">Alterar Senha</a>
+                                <a href="#sair">Sair</a>
+                            </div>
+                        </div>
+                        <span class="greeting-text" id="greeting">Bom dia,</span>
                         <span class="user-name" id="userName">João Silva</span>
                     </div>
                     <div class="logo-content">
@@ -281,11 +292,11 @@
             let greeting = '';
             
             if (hour >= 5 && hour < 12) {
-                greeting = 'Bom dia';
+                greeting = 'Bom dia,';
             } else if (hour >= 12 && hour < 18) {
-                greeting = 'Boa tarde';
+                greeting = 'Boa tarde,';
             } else {
-                greeting = 'Boa noite';
+                greeting = 'Boa noite,';
             }
             
             document.getElementById('greeting').textContent = greeting;
@@ -293,6 +304,26 @@
         
         // Update greeting when page loads
         updateGreeting();
+
+        // User dropdown functionality
+
+        // Script do dropdown do usuário
+        const userBtn = document.querySelector('.user-btn');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+
+        userBtn.addEventListener('click', () => {
+            if (dropdownMenu.style.display === 'block') {
+                dropdownMenu.style.display = 'none';
+            } else {
+                dropdownMenu.style.display = 'block';
+            }
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
