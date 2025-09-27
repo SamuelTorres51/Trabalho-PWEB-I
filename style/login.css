@@ -173,7 +173,7 @@
 /* Cadastro Button */
 .cadastro-btn {
     width: 100%;
-    background: linear-gradient(135deg, #27ae60, #229954);
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
     color: white;
     padding: 15px;
     border: none;
@@ -206,9 +206,9 @@
 }
 
 .cadastro-btn:hover {
-    background: linear-gradient(135deg, #229954, #1e8449);
+    background: linear-gradient(135deg, #c0392b, #a93226);
     transform: translate3d(0, -3px, 0);
-    box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
 }
 
 /* Login Page Styles */
