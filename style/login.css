@@ -264,6 +264,8 @@
 .input-group {
     position: relative;
     margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
 }
 
 .input-group i {
@@ -277,11 +279,29 @@
 
 .input-group input {
     width: 100%;
-    padding: 15px 15px 15px 45px;
+    padding: 12px 40px 12px 45px;
     border: 2px solid #e9ecef;
     border-radius: 10px;
     font-size: 1rem;
     transition: border-color 0.3s ease;
+}
+
+/* Cadeado à esquerda */
+.input-group .fa-lock {
+    position: absolute;
+    left: 15px;
+    color: #e74c3c;
+    pointer-events: none;
+}
+
+.input-group .toggle-password {
+    position: absolute;
+    right: 35px;
+    color: #e74c3c;
+    cursor: pointer;
+    background: white; /* faz parecer dentro da caixa */
+    padding: 5px;
+    border-radius: 50%;
 }
 
 .input-group input:focus {

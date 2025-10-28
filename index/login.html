@@ -56,6 +56,9 @@
                                 <i class="fas fa-lock"></i>
                                 <input type="password" id="loginPassword" name="loginPassword"
                                     placeholder="Digite sua senha" required>
+                                <span class="toggle-password">
+                                    <i class="fas fa-eye" id="toggleLoginPassword"></i>
+                                </span>
                             </div>
                         </div>
 
@@ -147,7 +150,7 @@
                         <h3>Redes Sociais</h3>
                         <p>
                             <!-- <i class="fab fa-instagram"></i>  -->
-                            <p>@barbeariaStyle01</p>
+                        <p>@barbeariaStyle01</p>
                         </p>
                     </div>
                 </div>
@@ -169,17 +172,8 @@
         </div>
     </footer>
 
-    <script>
-        function showTab(tabName) {
-            // Remove active class from all tabs and contents
-            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-
-            // Add active class to clicked tab and corresponding content
-            event.target.classList.add('active');
-            document.getElementById(tabName + '-tab').classList.add('active');
-        }
-    </script>
+    <!-- Script -->
+    <script src="/script/login.js"></script>
 </body>
 
 </html>

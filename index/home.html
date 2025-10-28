@@ -23,9 +23,8 @@
                                 <i class="fas fa-user"></i>
                             </button>
                             <div class="dropdown-menu">
-                                <a href="#editar-perfil">Editar Perfil</a>
-                                <a href="#historico">Histórico</a>
-                                <a href="#sair">Sair</a>
+                                <a href="/index/profile.html">Perfil</a>
+                                <a href="/index/login.html">Sair</a>
                             </div>
                         </div>
                         <span class="greeting-text" id="greeting">Bom dia,</span>
@@ -51,7 +50,7 @@
         </nav>
     </header>
 
-    <section class="hero">
+    <section id="home" class="hero">
         <div class="hero-bg hero-bg1"></div>
         <div class="hero-bg hero-bg2"></div>
 
@@ -286,152 +285,20 @@
         </div>
     </footer>
 
-    <script>
-        // Simple greeting based on time of day
-        function updateGreeting() {
-            const now = new Date();
-            const hour = now.getHours();
-            let greeting = '';
+    <!-- Mensagem de confirmação -->
+    <div id="confirmationPopup" class="confirmation-popup" style="display:none;">
+        <div class="popup-content">
+            <span id="closePopup" class="close-btn">&times;</span>
+            <p>Agendamento realizado com sucesso!</p>
+            <p><strong>Data:</strong> <span id="popupDate"></span></p>
+            <p><strong>Horário:</strong> <span id="popupTime"></span></p>
+            <p><strong>Serviço:</strong> <span id="popupService"></span></p>
+            <p><strong>Barbeiro:</strong> <span id="popupBarber"></span></p>
+        </div>
+    </div>
 
-            if (hour >= 5 && hour < 12) {
-                greeting = 'Bom dia,';
-            } else if (hour >= 12 && hour < 18) {
-                greeting = 'Boa tarde,';
-            } else {
-                greeting = 'Boa noite,';
-            }
-
-            document.getElementById('greeting').textContent = greeting;
-        }
-
-        // Update greeting when page loads
-        updateGreeting();
-
-        // User dropdown functionality
-
-        // Script do dropdown do usuário
-        const userBtn = document.querySelector('.user-btn');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-
-        userBtn.addEventListener('click', () => {
-            if (dropdownMenu.style.display === 'block') {
-                dropdownMenu.style.display = 'none';
-            } else {
-                dropdownMenu.style.display = 'block';
-            }
-        });
-
-        window.addEventListener('click', (e) => {
-            if (!userBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
-                dropdownMenu.style.display = 'none';
-            }
-        });
-
-        // Booking step navigation
-
-        const stepCalendar = document.getElementById('step-calendar');
-        const stepTime = document.getElementById('step-time');
-        const stepService = document.getElementById('step-service');
-
-        // Elementos para mostrar data/horário selecionados
-        const selectedDateSpan = document.querySelector('.selected-date-info span');
-        const selectedInfoDate = document.querySelector('.selected-info p span');
-        const selectedInfoTime = document.querySelector('.selected-info p:nth-child(2) span');
-
-        // Seleção de data
-        const calendarDays = document.querySelectorAll('.calendar-day:not(.empty):not(.disabled)');
-        calendarDays.forEach(day => {
-            day.addEventListener('click', () => {
-                // Marca visualmente o dia selecionado
-                calendarDays.forEach(d => d.classList.remove('selected'));
-                day.classList.add('selected');
-
-                // Atualiza data nos próximos passos (exemplo: 15 de janeiro de 2024)
-                // ...dentro do evento de clique do dia...
-                const dia = parseInt(day.textContent, 10);
-                const mes = 9; // Outubro é mês 9 (0 = janeiro)
-                const ano = 2025;
-
-                const data = new Date(ano, mes, dia);
-                const diasSemana = [
-                    'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira',
-                    'Quinta-feira', 'Sexta-feira', 'Sábado'
-                ];
-                const nomesMes = [
-                    'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho',
-                    'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
-                ];
-
-                const nomeDiaSemana = diasSemana[data.getDay()];
-                const nomeMes = nomesMes[data.getMonth()];
-                const dataFormatada = `${nomeDiaSemana}, ${dia} de ${nomeMes} de ${ano}`;
-
-                selectedDateSpan.textContent = dataFormatada;
-                selectedInfoDate.textContent = dataFormatada;
-                selectedDateSpan.textContent = dataFormatada;
-                selectedInfoDate.textContent = dataFormatada;
-
-                // Mostra próximo passo
-                stepCalendar.classList.remove('active');
-                stepTime.classList.add('active');
-            });
-        });
-
-        // Seleção de horário
-        const timeSlots = document.querySelectorAll('.time-slot:not(.unavailable)');
-        timeSlots.forEach(slot => {
-            slot.addEventListener('click', () => {
-                // Marca visualmente o horário selecionado
-                timeSlots.forEach(s => s.classList.remove('selected'));
-                slot.classList.add('selected');
-
-                // Atualiza horário nos próximos passos
-                selectedInfoTime.textContent = slot.textContent;
-
-                // Mostra próximo passo
-                stepTime.classList.remove('active');
-                stepService.classList.add('active');
-            });
-        });
-
-        // carousel hero
-        const heroImages = [
-            '/img/pic1.jpg',
-            '/img/pic2.jpg',
-            '/img/pic3.jpg',
-            '/img/pic4.jpg',
-            '/img/pic5.jpg'
-        ];
-
-        let currentHero = 0;
-        const heroBg1 = document.querySelector('.hero-bg1');
-        const heroBg2 = document.querySelector('.hero-bg2');
-        let topDiv = heroBg1;
-        let bottomDiv = heroBg2;
-
-        // Pré-carregar imagens para evitar travadas
-        heroImages.forEach(src => { const img = new Image(); img.src = src; });
-
-        // Inicializa primeira imagem
-        topDiv.style.backgroundImage = `url('${heroImages[currentHero]}')`;
-        topDiv.classList.add('show');
-
-        // Função de troca
-        setInterval(() => {
-            const nextHero = (currentHero + 1) % heroImages.length;
-            bottomDiv.style.backgroundImage = `url('${heroImages[nextHero]}')`;
-            bottomDiv.classList.add('show');
-
-            // Troca referências
-            [topDiv, bottomDiv] = [bottomDiv, topDiv];
-
-            // Remove fade da div que vai ficar por baixo
-            setTimeout(() => bottomDiv.classList.remove('show'), 1000);
-
-            currentHero = nextHero;
-        }, 5000);
-
-    </script>
+    <!-- Script -->
+    <script src="/script/home.js"></script>
 </body>
 
 </html>

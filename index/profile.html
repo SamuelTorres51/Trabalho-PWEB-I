@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia Style - Perfil do Usuário</title>
+    <link rel="icon" href="/img/favicon-96x96.png" type="image/x-icon">
+    <link rel="stylesheet" href="/style/common.css">
+    <link rel="stylesheet" href="/style/profile.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <div class="logo-content">
+                        <i class="fas fa-cut"></i>
+                        <span>Barbearia Style</span>
+                    </div>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/index/home.html" class="nav-link">Voltar</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Perfil -->
+    <section id="profile" class="profile-section">
+        <div class="container">
+            <h2>Meu Perfil</h2>
+            <div class="profile-container">
+                <!-- Lado esquerdo: Foto e resumo -->
+                <div class="profile-sidebar">
+                    <div class="profile-picture">
+                        <img src="/img/user-placeholder.png" alt="Foto do usuário">
+                    </div>
+                    <h3 id="userName">Matheus M.</h3>
+                    <p id="userEmail">matheus@email.com</p>
+                    <p id="userPhone">(11) 99999-9999</p>
+                </div>
+
+                <!-- Lado direito: Formulário de edição -->
+                <div class="profile-main">
+                    <h3>Editar Perfil</h3>
+                    <form id="profileForm" class="form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fullName">Nome Completo</label>
+                                <input type="text" id="fullName" name="fullName" value="Matheus M." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email" id="email" name="email" value="matheus@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Telefone</label>
+                                <input type="text" id="phone" name="phone" value="(11) 99999-9999" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Senha</label>
+                                <input type="password" id="password" name="password" placeholder="••••••••">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Observações</label>
+                            <textarea id="notes" name="notes" rows="3" placeholder="Alguma observação..."></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn btn-primary">Salvar Alterações</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Histórico de Agendamentos -->
+            <div class="booking-history">
+                <h3>Histórico de Agendamentos</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Horário</th>
+                            <th>Serviço</th>
+                            <th>Barbeiro</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15/10/2025</td>
+                            <td>14:30</td>
+                            <td>Corte Masculino</td>
+                            <td>Pedro H.</td>
+                            <td>Concluído</td>
+                        </tr>
+                        <tr>
+                            <td>10/09/2025</td>
+                            <td>09:00</td>
+                            <td>Barba</td>
+                            <td>Luciano S.</td>
+                            <td>Cancelado</td>
+                        </tr>
+                        <tr>
+                            <td>05/08/2025</td>
+                            <td>16:00</td>
+                            <td>Corte + Barba</td>
+                            <td>Samuel T.</td>
+                            <td>Concluído</td>
+                        </tr>
+                        <!-- Mais registros aqui -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Barbearia Style. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+
+</html>

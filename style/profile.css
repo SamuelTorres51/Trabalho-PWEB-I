@@ -1,0 +1,145 @@
+/* Perfil - Layout Geral */
+.profile-section {
+    padding: 100px 0 50px 0;
+    background: #f8f9fa;
+}
+
+.profile-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #2c3e50;
+}
+
+/* Container principal do perfil */
+.profile-container {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+/* Sidebar do usuário */
+.profile-sidebar {
+    flex: 1 1 250px;
+    max-width: 300px;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.profile-picture img {
+    width: 200px;
+    height: 200px;
+    border-radius: 80%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 4px solid #e74c3c;
+}
+
+.profile-sidebar h3 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.profile-sidebar p {
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* Formulário de edição */
+.profile-main {
+    flex: 2 1 500px;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.profile-main h3 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+/* Histórico de Agendamentos */
+.booking-history {
+    margin-top: 3rem;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.booking-history h3 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.booking-history table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.booking-history th, 
+.booking-history td {
+    padding: 12px 15px;
+    text-align: center;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 500;
+}
+
+.booking-history th {
+    background: #e74c3c;
+    color: white;
+    border-radius: 8px 8px 0 0;
+}
+
+.booking-history tr:hover {
+    background: #f1f1f1;
+}
+
+.booking-history td:last-child {
+    font-weight: bold;
+}
+
+.booking-history td:last-child.concluido {
+    color: #27ae60;
+}
+
+.booking-history td:last-child.cancelado {
+    color: #e74c3c;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .profile-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .profile-sidebar, .profile-main {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-section h2 {
+        font-size: 2rem;
+    }
+
+    .profile-main h3, .booking-history h3 {
+        font-size: 1.3rem;
+    }
+
+    .booking-history th, .booking-history td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .profile-picture img {
+        width: 100px;
+        height: 100px;
+    }
+}
