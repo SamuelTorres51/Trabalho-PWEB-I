@@ -381,3 +381,153 @@ html {
         padding: 1.5rem;
     }
 }
+
+/* ============================================
+   NOTIFICAÇÕES
+   ============================================ */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    z-index: 10000;
+    min-width: 300px;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification i {
+    font-size: 1.25rem;
+}
+
+.notification-success {
+    border-left: 4px solid #27ae60;
+}
+
+.notification-success i {
+    color: #27ae60;
+}
+
+.notification-error {
+    border-left: 4px solid #e74c3c;
+}
+
+.notification-error i {
+    color: #e74c3c;
+}
+
+.notification-info {
+    border-left: 4px solid #3498db;
+}
+
+.notification-info i {
+    color: #3498db;
+}
+
+.notification-warning {
+    border-left: 4px solid #f39c12;
+}
+
+.notification-warning i {
+    color: #f39c12;
+}
+
+/* ============================================
+   ERROS DE CAMPO
+   ============================================ */
+.field-error {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.field-error::before {
+    content: '⚠';
+    font-size: 0.75rem;
+}
+
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+    border-color: #e74c3c;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.form-group input.has-value:valid {
+    border-color: #27ae60;
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+.loading-slots {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.loading-slots i {
+    margin-right: 0.5rem;
+    color: #e74c3c;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ============================================
+   MELHORIAS DE ANIMAÇÃO
+   ============================================ */
+.calendar-day.today {
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+.calendar-day.today:hover {
+    background: #2980b9;
+}
+
+.service-card {
+    cursor: pointer;
+}
+
+/* ============================================
+   RESPONSIVIDADE PARA NOTIFICAÇÕES
+   ============================================ */
+@media (max-width: 768px) {
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+        transform: translateY(-100px);
+    }
+
+    .notification.show {
+        transform: translateY(0);
+    }
+}

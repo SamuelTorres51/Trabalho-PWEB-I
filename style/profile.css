@@ -29,13 +29,27 @@
     text-align: center;
 }
 
-.profile-picture img {
+.profile-picture img,
+.profile-picture-placeholder {
     width: 200px;
     height: 200px;
-    border-radius: 80%;
+    border-radius: 50%;
     object-fit: cover;
     margin-bottom: 1rem;
     border: 4px solid #e74c3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    font-size: 4rem;
+    box-shadow: 0 5px 20px rgba(231, 76, 60, 0.3);
+    transition: all 0.3s ease;
+}
+
+.profile-picture-placeholder:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
 }
 
 .profile-sidebar h3 {

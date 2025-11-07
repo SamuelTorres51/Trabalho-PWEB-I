@@ -185,8 +185,7 @@
                     </div>
                 </div>
                 <div class="step-navigation">
-                    <button class="btn-secondary"
-                        onclick="stepTime.classList.remove('active'); stepCalendar.classList.add('active')">Voltar</button>
+                    <button class="btn-secondary" data-step-back="calendar">Voltar</button>
                 </div>
             </div>
 
@@ -229,8 +228,7 @@
                     </div>
 
                     <div class="step-navigation">
-                        <button type="button" class="btn-secondary"
-                            onclick="stepService.classList.remove('active'); stepTime.classList.add('active')">Voltar</button>
+                        <button type="button" class="btn-secondary" data-step-back="time">Voltar</button>
                         <button type="submit" class="submit-btn btn-primary">Confirmar Agendamento</button>
                     </div>
                 </form>
@@ -288,12 +286,17 @@
     <!-- Mensagem de confirmação -->
     <div id="confirmationPopup" class="confirmation-popup" style="display:none;">
         <div class="popup-content">
-            <span id="closePopup" class="close-btn">&times;</span>
-            <p>Agendamento realizado com sucesso!</p>
-            <p><strong>Data:</strong> <span id="popupDate"></span></p>
-            <p><strong>Horário:</strong> <span id="popupTime"></span></p>
-            <p><strong>Serviço:</strong> <span id="popupService"></span></p>
-            <p><strong>Barbeiro:</strong> <span id="popupBarber"></span></p>
+            <button id="closePopup" class="close-btn" aria-label="Fechar">&times;</button>
+            <div class="popup-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p class="popup-title">Agendamento realizado com sucesso!</p>
+            <div class="popup-details">
+                <p><strong>Data:</strong> <span id="popupDate"></span></p>
+                <p><strong>Horário:</strong> <span id="popupTime"></span></p>
+                <p><strong>Serviço:</strong> <span id="popupService"></span></p>
+                <p><strong>Barbeiro:</strong> <span id="popupBarber"></span></p>
+            </div>
         </div>
     </div>
 
