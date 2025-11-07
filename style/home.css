@@ -11,6 +11,10 @@
     margin-top: 80px;
 }
 
+body.dark-mode .hero {
+    color: #e0e0e0;
+}
+
 /* Divs do carrossel */
 .hero-bg {
     position: absolute;
@@ -1179,6 +1183,79 @@
     color: white;
 }
 
+/* Modo Escuro - Estilos Específicos Home */
+body.dark-mode .hero-bg {
+    opacity: 0.7;
+}
+
+body.dark-mode .hero-content h1,
+body.dark-mode .hero-content p {
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}
+
+body.dark-mode .calendar-day-header {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+body.dark-mode .service-detail-item p,
+body.dark-mode .service-detail-item ul {
+    color: #b0b0b0;
+}
+
+body.dark-mode .modal-body {
+    color: #e0e0e0;
+}
+
+body.dark-mode .popup-details {
+    border-top-color: #444;
+}
+
+body.dark-mode .popup-details p {
+    color: #e0e0e0;
+}
+
+body.dark-mode .popup-details strong {
+    color: #e74c3c;
+}
+
+body.dark-mode .popup-details span {
+    color: #b0b0b0;
+}
+
+body.dark-mode .service-icon-large {
+    color: #e74c3c;
+}
+
+body.dark-mode .popup-icon {
+    color: #27ae60;
+}
+
+body.dark-mode .close-btn {
+    color: #b0b0b0;
+}
+
+body.dark-mode .close-btn:hover {
+    color: #e74c3c;
+    background: #3d3d3d;
+}
+
+body.dark-mode .no-selection {
+    color: #666;
+}
+
+body.dark-mode .total-line {
+    color: #b0b0b0;
+}
+
+body.dark-mode .total-line.final {
+    color: #e74c3c;
+}
+
+body.dark-mode .service-price {
+    color: #e74c3c;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .barbers-grid {
@@ -1196,5 +1273,12 @@
 
     .modal-footer {
         flex-direction: column;
+    }
+
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        margin-left: 0.5rem;
     }
 }

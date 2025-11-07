@@ -25,10 +25,15 @@
                 <ul class="nav-menu">
                     <li><a href="/index/home.html" class="nav-link">Voltar</a></li>
                 </ul>
-                <div class="hamburger">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="themeToggle" class="theme-toggle" aria-label="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="hamburger">
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                        <span class="bar"></span>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -223,7 +228,8 @@
         <span class="whatsapp-tooltip">Fale conosco!</span>
     </a>
 
-    <!-- Script -->
+    <!-- Scripts -->
+    <script src="/script/theme.js"></script>
     <script src="/script/profile.js"></script>
 </body>
 

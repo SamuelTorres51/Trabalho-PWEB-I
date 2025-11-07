@@ -14,6 +14,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
@@ -797,4 +798,307 @@ button:disabled {
     .notification.show {
         transform: translateY(0);
     }
+}
+
+/* ============================================
+   MODO ESCURO/CLARO
+   ============================================ */
+
+/* Botão Toggle de Tema */
+.theme-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    margin-left: 1rem;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(180deg);
+    border-color: #e74c3c;
+}
+
+.theme-toggle i {
+    transition: transform 0.3s ease;
+}
+
+/* Modo Escuro */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .header {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .form {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group select:focus,
+body.dark-mode .form-group textarea:focus {
+    border-color: #e74c3c;
+    background: #252525;
+}
+
+body.dark-mode .service-card,
+body.dark-mode .barber-card,
+body.dark-mode .calculator-services,
+body.dark-mode .calculator-result,
+body.dark-mode .booking-step,
+body.dark-mode .calendar-container,
+body.dark-mode .profile-sidebar,
+body.dark-mode .profile-main,
+body.dark-mode .booking-history {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .service-card:hover,
+body.dark-mode .barber-card:hover {
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+}
+
+body.dark-mode .services,
+body.dark-mode .barbers-section,
+body.dark-mode .calculator-section,
+body.dark-mode .booking-section,
+body.dark-mode .profile-section {
+    background: #1a1a1a;
+}
+
+body.dark-mode .services h2,
+body.dark-mode .barbers-section h2,
+body.dark-mode .calculator-section h2,
+body.dark-mode .booking-section h2,
+body.dark-mode .profile-section h2,
+body.dark-mode .section-subtitle {
+    color: #e0e0e0;
+}
+
+body.dark-mode .service-card h3,
+body.dark-mode .barber-info h3,
+body.dark-mode .booking-step h3 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .service-card p,
+body.dark-mode .barber-specialty,
+body.dark-mode .barber-stats {
+    color: #b0b0b0;
+}
+
+body.dark-mode .calendar-day {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+
+body.dark-mode .calendar-day:hover:not(.disabled):not(.empty) {
+    background: #e74c3c;
+    color: white;
+}
+
+body.dark-mode .calendar-day.selected {
+    background: #e74c3c;
+    color: white;
+}
+
+body.dark-mode .calendar-day.disabled {
+    background: #1a1a1a;
+    color: #666;
+}
+
+body.dark-mode .calendar-day.today {
+    background: #3498db;
+    color: white;
+}
+
+body.dark-mode .time-slot {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .time-slot:hover:not(.unavailable) {
+    background: #e74c3c;
+    color: white;
+}
+
+body.dark-mode .time-slot.selected {
+    background: #e74c3c;
+    color: white;
+}
+
+body.dark-mode .time-slot.unavailable {
+    background: #1a1a1a;
+    color: #666;
+}
+
+body.dark-mode .selected-info,
+body.dark-mode .selected-date-info {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-left-color: #e74c3c;
+}
+
+body.dark-mode .notification {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.7);
+}
+
+body.dark-mode .modal-content-service,
+body.dark-mode .popup-content {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+body.dark-mode .modal-content-service h2,
+body.dark-mode .popup-content p {
+    color: #e0e0e0;
+}
+
+body.dark-mode .modal-overlay {
+    background: rgba(0,0,0,0.8);
+}
+
+body.dark-mode .confirmation-popup {
+    background-color: rgba(0,0,0,0.8);
+}
+
+body.dark-mode .dropdown-menu {
+    background: #2d2d2d;
+    border-color: #444;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .dropdown-menu a {
+    color: #e0e0e0;
+}
+
+body.dark-mode .dropdown-menu a:hover {
+    background: #3d3d3d;
+    color: #e74c3c;
+}
+
+body.dark-mode .footer {
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    border-top: 1px solid #444;
+}
+
+body.dark-mode .footer-section p,
+body.dark-mode .footer-section ul li a,
+body.dark-mode .contact-list li {
+    color: #b0b0b0;
+}
+
+body.dark-mode .footer-section ul li a:hover {
+    color: #e74c3c;
+}
+
+body.dark-mode .footer-bottom {
+    border-top-color: #444;
+}
+
+body.dark-mode .footer-bottom p {
+    color: #888;
+}
+
+body.dark-mode .calculator-option {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .calculator-option:hover {
+    border-color: #e74c3c;
+}
+
+body.dark-mode .selected-service-item {
+    background: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .calculator-total {
+    background: #1a1a1a;
+}
+
+body.dark-mode .booking-history table th {
+    background: #e74c3c;
+}
+
+body.dark-mode .booking-history tr:hover {
+    background: #3d3d3d;
+}
+
+body.dark-mode .search-box input {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .search-box input:focus {
+    border-color: #e74c3c;
+}
+
+body.dark-mode .filter-btn {
+    background: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+body.dark-mode .filter-btn:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+body.dark-mode .filter-btn.active {
+    background: #e74c3c;
+    border-color: #e74c3c;
+}
+
+body.dark-mode .history-stats {
+    background: #2d2d2d;
+}
+
+body.dark-mode .no-results {
+    color: #888;
+}
+
+body.dark-mode .no-results i {
+    color: #444;
+}
+
+/* Transições suaves para modo escuro */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Exceções para elementos que não devem ter transição */
+img, svg, video, iframe {
+    transition: none;
 }

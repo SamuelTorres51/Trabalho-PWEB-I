@@ -257,6 +257,51 @@
     color: #ddd;
 }
 
+/* Modo Escuro - Estilos Específicos Profile */
+body.dark-mode .profile-section {
+    background: #1a1a1a;
+}
+
+body.dark-mode .profile-section h2 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .profile-sidebar h3,
+body.dark-mode .profile-main h3,
+body.dark-mode .booking-history h3 {
+    color: #e0e0e0;
+}
+
+body.dark-mode .profile-sidebar p {
+    color: #b0b0b0;
+}
+
+body.dark-mode .form-group label {
+    color: #e0e0e0;
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea {
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .form-group input:focus,
+body.dark-mode .form-group textarea:focus {
+    border-color: #e74c3c;
+    background: #252525;
+}
+
+body.dark-mode .upload-photo-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+body.dark-mode .upload-photo-btn:hover {
+    background: #c0392b;
+}
+
 /* Responsividade */
 @media (max-width: 992px) {
     .profile-container {
