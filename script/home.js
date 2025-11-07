@@ -19,6 +19,9 @@ function initApp() {
     initBookingSystem();
     initServiceCards();
     initScrollAnimations();
+    initServiceModal();
+    initPriceCalculator();
+    initBarbersSection();
 }
 
 // ============================================
@@ -433,6 +436,35 @@ function initBookingSystem() {
             const serviceText = service.selectedOptions[0].textContent;
             const barberText = barber.selectedOptions[0].textContent;
 
+            // Salva agendamento no localStorage
+            const booking = {
+                id: Date.now(),
+                date: formatDateForStorage(window.selectedDate),
+                dateObj: window.selectedDate,
+                time: window.selectedTime,
+                service: serviceText.split(' - ')[0], // Remove o preço
+                barber: barberText,
+                status: 'Futuro'
+            };
+
+            // Carrega agendamentos existentes
+            let bookings = [];
+            const savedBookings = localStorage.getItem('userBookings');
+            if (savedBookings) {
+                try {
+                    bookings = JSON.parse(savedBookings);
+                    bookings.forEach(b => {
+                        b.dateObj = new Date(b.dateObj);
+                    });
+                } catch (e) {
+                    console.error('Erro ao carregar agendamentos:', e);
+                }
+            }
+
+            // Adiciona novo agendamento
+            bookings.push(booking);
+            localStorage.setItem('userBookings', JSON.stringify(bookings));
+
             // Preenche o popup
             const popupDate = document.getElementById('popupDate');
             const popupTime = document.getElementById('popupTime');
@@ -458,6 +490,10 @@ function initBookingSystem() {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
             bookingForm.reset();
+            
+            // Limpa seleções
+            window.selectedDate = null;
+            window.selectedTime = null;
             
             if (stepService) stepService.classList.remove('active');
             
@@ -607,4 +643,312 @@ function scrollToSection(sectionId) {
             behavior: 'smooth'
         });
     }
+}
+
+// ============================================
+// 9. MODAL DE DETALHES DOS SERVIÇOS
+// ============================================
+function initServiceModal() {
+    const serviceModal = document.getElementById('serviceModal');
+    const closeModal = document.getElementById('closeServiceModal');
+    const serviceCards = document.querySelectorAll('.service-card');
+    const addToCalculatorBtn = document.getElementById('addToCalculatorBtn');
+    const bookServiceBtn = document.getElementById('bookServiceBtn');
+
+    if (!serviceModal) return;
+
+    // Dados dos serviços
+    const servicesData = {
+        corte: {
+            title: 'Corte Masculino',
+            price: 'R$ 25,00',
+            duration: '30 minutos',
+            description: 'Corte moderno e estiloso realizado por profissionais experientes. Inclui corte personalizado, acabamento profissional e produtos de qualidade.',
+            includes: ['Corte personalizado', 'Acabamento profissional', 'Produtos de qualidade', 'Consulta de estilo'],
+            icon: 'fa-cut'
+        },
+        barba: {
+            title: 'Barba',
+            price: 'R$ 15,00',
+            duration: '20 minutos',
+            description: 'Modelagem e aparar barba com técnicas profissionais. Deixe sua barba sempre impecável.',
+            includes: ['Modelagem personalizada', 'Aparar e alinhar', 'Produtos para barba', 'Finalização'],
+            icon: 'fa-scissors'
+        },
+        corte_barba: {
+            title: 'Corte + Barba',
+            price: 'R$ 35,00',
+            duration: '45 minutos',
+            description: 'Pacote completo com corte e barba. O melhor custo-benefício para cuidar do seu visual.',
+            includes: ['Corte completo', 'Barba modelada', 'Produtos premium', 'Consulta de estilo', 'Desconto especial'],
+            icon: 'fa-spa'
+        },
+        sobrancelha: {
+            title: 'Sobrancelha',
+            price: 'R$ 10,00',
+            duration: '15 minutos',
+            description: 'Design e limpeza de sobrancelhas para um visual mais definido e harmonioso.',
+            includes: ['Design personalizado', 'Limpeza completa', 'Produtos específicos'],
+            icon: 'fa-magic'
+        }
+    };
+
+    // Abre modal ao clicar no card ou botão
+    serviceCards.forEach(card => {
+        const detailsBtn = card.querySelector('.service-details-btn');
+        if (detailsBtn) {
+            detailsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const serviceId = card.getAttribute('data-service');
+                openServiceModal(serviceId, servicesData[serviceId]);
+            });
+        }
+
+        // Também abre ao clicar no card inteiro
+        card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('service-details-btn')) return;
+            const serviceId = card.getAttribute('data-service');
+            openServiceModal(serviceId, servicesData[serviceId]);
+        });
+    });
+
+    // Fecha modal
+    if (closeModal) {
+        closeModal.addEventListener('click', closeServiceModal);
+    }
+
+    if (serviceModal) {
+        serviceModal.addEventListener('click', (e) => {
+            if (e.target.classList.contains('service-modal') || e.target.classList.contains('modal-overlay')) {
+                closeServiceModal();
+            }
+        });
+    }
+
+    // Adicionar à calculadora
+    if (addToCalculatorBtn) {
+        addToCalculatorBtn.addEventListener('click', () => {
+            const serviceId = addToCalculatorBtn.getAttribute('data-service');
+            if (serviceId) {
+                addServiceToCalculator(serviceId);
+                closeServiceModal();
+                scrollToSection('calculator');
+            }
+        });
+    }
+
+    // Agendar serviço
+    if (bookServiceBtn) {
+        bookServiceBtn.addEventListener('click', () => {
+            const serviceId = bookServiceBtn.getAttribute('data-service');
+            if (serviceId) {
+                selectServiceForBooking(serviceId);
+                closeServiceModal();
+                scrollToSection('booking');
+            }
+        });
+    }
+
+    function openServiceModal(serviceId, data) {
+        if (!data) return;
+
+        document.getElementById('modalServiceTitle').textContent = data.title;
+        document.getElementById('modalServicePrice').textContent = data.price;
+        document.getElementById('modalServiceDuration').textContent = data.duration;
+        document.getElementById('modalServiceDescription').textContent = data.description;
+        
+        const iconElement = document.getElementById('modalServiceIcon').querySelector('i');
+        iconElement.className = `fas ${data.icon}`;
+
+        const includesList = document.getElementById('modalServiceIncludes');
+        includesList.innerHTML = '';
+        data.includes.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            includesList.appendChild(li);
+        });
+
+        // Atualiza botões com data-service
+        if (addToCalculatorBtn) {
+            addToCalculatorBtn.setAttribute('data-service', serviceId);
+        }
+        if (bookServiceBtn) {
+            bookServiceBtn.setAttribute('data-service', serviceId);
+        }
+
+        serviceModal.style.display = 'flex';
+        setTimeout(() => {
+            serviceModal.style.opacity = '1';
+        }, 10);
+    }
+
+    function closeServiceModal() {
+        serviceModal.style.opacity = '0';
+        setTimeout(() => {
+            serviceModal.style.display = 'none';
+        }, 300);
+    }
+
+    window.openServiceModal = openServiceModal;
+    window.closeServiceModal = closeServiceModal;
+}
+
+// ============================================
+// 10. CALCULADORA DE PREÇOS
+// ============================================
+function initPriceCalculator() {
+    const checkboxes = document.querySelectorAll('.calculator-option input[type="checkbox"]');
+    const selectedServicesList = document.getElementById('selectedServicesList');
+    const subtotalElement = document.getElementById('subtotal');
+    const discountElement = document.getElementById('discount');
+    const discountLine = document.getElementById('discountLine');
+    const totalElement = document.getElementById('total');
+    const bookSelectedBtn = document.getElementById('bookSelectedBtn');
+
+    const services = {
+        corte: { name: 'Corte Masculino', price: 25.00 },
+        barba: { name: 'Barba', price: 15.00 },
+        corte_barba: { name: 'Corte + Barba', price: 35.00 },
+        sobrancelha: { name: 'Sobrancelha', price: 10.00 }
+    };
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateCalculator);
+    });
+
+    if (bookSelectedBtn) {
+        bookSelectedBtn.addEventListener('click', () => {
+            const selected = Array.from(checkboxes).filter(cb => cb.checked);
+            if (selected.length > 0) {
+                scrollToSection('booking');
+                showNotification('Selecione data e horário para agendar', 'info');
+            }
+        });
+    }
+
+    function updateCalculator() {
+        const selected = Array.from(checkboxes).filter(cb => cb.checked);
+        
+        if (selected.length === 0) {
+            selectedServicesList.innerHTML = '<p class="no-selection">Nenhum serviço selecionado</p>';
+            subtotalElement.textContent = 'R$ 0,00';
+            discountElement.textContent = '-R$ 0,00';
+            totalElement.textContent = 'R$ 0,00';
+            discountLine.style.display = 'none';
+            bookSelectedBtn.disabled = true;
+            return;
+        }
+
+        // Lista de serviços selecionados
+        selectedServicesList.innerHTML = '';
+        selected.forEach(checkbox => {
+            const serviceId = checkbox.value;
+            const service = services[serviceId];
+            const div = document.createElement('div');
+            div.className = 'selected-service-item';
+            div.innerHTML = `
+                <span>${service.name}</span>
+                <span class="service-price">R$ ${service.price.toFixed(2).replace('.', ',')}</span>
+            `;
+            selectedServicesList.appendChild(div);
+        });
+
+        // Calcula subtotal
+        let subtotal = 0;
+        selected.forEach(checkbox => {
+            const price = parseFloat(checkbox.getAttribute('data-price'));
+            subtotal += price;
+        });
+
+        // Verifica desconto (se selecionar corte + barba separados, oferece desconto)
+        let discount = 0;
+        const hasCorte = selected.some(cb => cb.value === 'corte');
+        const hasBarba = selected.some(cb => cb.value === 'barba');
+        const hasPacote = selected.some(cb => cb.value === 'corte_barba');
+
+        if (hasCorte && hasBarba && !hasPacote) {
+            // Se selecionou corte e barba separados, desconto de 5 reais
+            discount = 5.00;
+            discountLine.style.display = 'flex';
+        } else if (hasPacote) {
+            // Se selecionou o pacote, já tem desconto embutido
+            discountLine.style.display = 'none';
+        } else {
+            discountLine.style.display = 'none';
+        }
+
+        const total = subtotal - discount;
+
+        subtotalElement.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        discountElement.textContent = `-R$ ${discount.toFixed(2).replace('.', ',')}`;
+        totalElement.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        
+        bookSelectedBtn.disabled = false;
+    }
+
+    window.addServiceToCalculator = function(serviceId) {
+        const checkbox = document.querySelector(`.calculator-option input[value="${serviceId}"]`);
+        if (checkbox && !checkbox.checked) {
+            checkbox.checked = true;
+            updateCalculator();
+            showNotification('Serviço adicionado à calculadora!', 'success');
+        }
+    };
+}
+
+// ============================================
+// 11. SEÇÃO DE BARBEIROS
+// ============================================
+function initBarbersSection() {
+    const barberCards = document.querySelectorAll('.barber-card');
+    
+    barberCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+}
+
+// Função global para selecionar barbeiro
+window.selectBarber = function(barberId, barberName) {
+    const barberSelect = document.getElementById('barber');
+    if (barberSelect) {
+        barberSelect.value = barberId;
+        scrollToSection('booking');
+        showNotification(`Barbeiro ${barberName} selecionado!`, 'success');
+        
+        // Se já estiver na etapa de serviço, destaca o select
+        const stepService = document.getElementById('step-service');
+        if (stepService && stepService.classList.contains('active')) {
+            barberSelect.focus();
+            barberSelect.style.borderColor = '#e74c3c';
+            setTimeout(() => {
+                barberSelect.style.borderColor = '';
+            }, 2000);
+        }
+    }
+};
+
+// Função para selecionar serviço para agendamento
+window.selectServiceForBooking = function(serviceId) {
+    const serviceSelect = document.getElementById('service');
+    if (serviceSelect) {
+        serviceSelect.value = serviceId;
+        showNotification('Serviço selecionado! Agora escolha data e horário.', 'success');
+    }
+};
+
+/**
+ * Formata data para armazenamento
+ */
+function formatDateForStorage(date) {
+    if (!date) return '';
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
 }

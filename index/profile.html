@@ -86,42 +86,56 @@
 
             <!-- Histórico de Agendamentos -->
             <div class="booking-history">
-                <h3>Histórico de Agendamentos</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Data</th>
-                            <th>Horário</th>
-                            <th>Serviço</th>
-                            <th>Barbeiro</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>15/10/2025</td>
-                            <td>14:30</td>
-                            <td>Corte Masculino</td>
-                            <td>Pedro H.</td>
-                            <td>Concluído</td>
-                        </tr>
-                        <tr>
-                            <td>10/09/2025</td>
-                            <td>09:00</td>
-                            <td>Barba</td>
-                            <td>Luciano S.</td>
-                            <td>Cancelado</td>
-                        </tr>
-                        <tr>
-                            <td>05/08/2025</td>
-                            <td>16:00</td>
-                            <td>Corte + Barba</td>
-                            <td>Samuel T.</td>
-                            <td>Concluído</td>
-                        </tr>
-                        <!-- Mais registros aqui -->
-                    </tbody>
-                </table>
+                <div class="history-header">
+                    <h3>Histórico de Agendamentos</h3>
+                    <div class="history-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="historySearch" placeholder="Buscar por serviço, barbeiro ou data...">
+                        </div>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">Todos</button>
+                            <button class="filter-btn" data-filter="concluido">Concluídos</button>
+                            <button class="filter-btn" data-filter="cancelado">Cancelados</button>
+                            <button class="filter-btn" data-filter="futuro">Futuros</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="history-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalBookings">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="completedBookings">0</span>
+                        <span class="stat-label">Concluídos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="futureBookings">0</span>
+                        <span class="stat-label">Futuros</span>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Horário</th>
+                                <th>Serviço</th>
+                                <th>Barbeiro</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookingsTableBody">
+                            <!-- Conteúdo será preenchido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="no-results" id="noResults" style="display: none;">
+                    <i class="fas fa-search"></i>
+                    <p>Nenhum agendamento encontrado</p>
+                </div>
             </div>
         </div>
     </section>

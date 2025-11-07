@@ -38,6 +38,8 @@
                 <ul class="nav-menu">
                     <li><a href="#home" class="nav-link">Início</a></li>
                     <li><a href="#services" class="nav-link">Serviços</a></li>
+                    <li><a href="#barbers" class="nav-link">Barbeiros</a></li>
+                    <li><a href="#calculator" class="nav-link">Calculadora</a></li>
                     <li><a href="#booking" class="nav-link">Agendar</a></li>
                     <li><a href="#contact" class="nav-link">Contato</a></li>
                 </ul>
@@ -66,29 +68,208 @@
         <div class="container">
             <h2>Nossos Serviços</h2>
             <div class="services-grid">
-                <div class="service-card">
+                <div class="service-card" data-service="corte" data-price="25.00" data-duration="30">
                     <i class="fas fa-cut"></i>
                     <h3>Corte Masculino</h3>
                     <p>Corte moderno e estiloso</p>
                     <span class="price">R$ 25,00</span>
+                    <button class="service-details-btn">Ver Detalhes</button>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-service="barba" data-price="15.00" data-duration="20">
                     <i class="fas fa-scissors"></i>
                     <h3>Barba</h3>
                     <p>Modelagem e aparar barba</p>
                     <span class="price">R$ 15,00</span>
+                    <button class="service-details-btn">Ver Detalhes</button>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-service="corte_barba" data-price="35.00" data-duration="45">
                     <i class="fas fa-spa"></i>
                     <h3>Corte + Barba</h3>
                     <p>Pacote completo</p>
                     <span class="price">R$ 35,00</span>
+                    <button class="service-details-btn">Ver Detalhes</button>
                 </div>
-                <div class="service-card">
+                <div class="service-card" data-service="sobrancelha" data-price="10.00" data-duration="15">
                     <i class="fas fa-magic"></i>
                     <h3>Sobrancelha</h3>
                     <p>Design e limpeza</p>
                     <span class="price">R$ 10,00</span>
+                    <button class="service-details-btn">Ver Detalhes</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Barbers Section -->
+    <section id="barbers" class="barbers-section">
+        <div class="container">
+            <h2>Nossos Barbeiros</h2>
+            <p class="section-subtitle">Profissionais experientes prontos para cuidar do seu estilo</p>
+            <div class="barbers-grid">
+                <div class="barber-card" data-barber="luciano">
+                    <div class="barber-image">
+                        <div class="barber-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-badge">
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                        </div>
+                    </div>
+                    <div class="barber-info">
+                        <h3>Luciano Sousa Barbosa</h3>
+                        <p class="barber-specialty">Especialista em Cortes Modernos</p>
+                        <div class="barber-stats">
+                            <span><i class="fas fa-users"></i> 250+ clientes</span>
+                            <span><i class="fas fa-clock"></i> 5 anos exp.</span>
+                        </div>
+                        <div class="barber-services">
+                            <span class="service-tag">Corte</span>
+                            <span class="service-tag">Barba</span>
+                            <span class="service-tag">Sobrancelha</span>
+                        </div>
+                        <button class="barber-btn" onclick="selectBarber('luciano', 'Luciano Sousa Barbosa')">
+                            Agendar com Luciano
+                        </button>
+                    </div>
+                </div>
+
+                <div class="barber-card" data-barber="pedro">
+                    <div class="barber-image">
+                        <div class="barber-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-badge">
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                        </div>
+                    </div>
+                    <div class="barber-info">
+                        <h3>Pedro Henrique Rodrigues</h3>
+                        <p class="barber-specialty">Mestre em Design de Barba</p>
+                        <div class="barber-stats">
+                            <span><i class="fas fa-users"></i> 180+ clientes</span>
+                            <span><i class="fas fa-clock"></i> 3 anos exp.</span>
+                        </div>
+                        <div class="barber-services">
+                            <span class="service-tag">Barba</span>
+                            <span class="service-tag">Corte</span>
+                            <span class="service-tag">Pacote</span>
+                        </div>
+                        <button class="barber-btn" onclick="selectBarber('pedro', 'Pedro Henrique Rodrigues')">
+                            Agendar com Pedro
+                        </button>
+                    </div>
+                </div>
+
+                <div class="barber-card" data-barber="joao">
+                    <div class="barber-image">
+                        <div class="barber-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-badge">
+                            <i class="fas fa-star"></i>
+                            <span>4.7</span>
+                        </div>
+                    </div>
+                    <div class="barber-info">
+                        <h3>João Vitor Santana</h3>
+                        <p class="barber-specialty">Especialista em Estilos Clássicos</p>
+                        <div class="barber-stats">
+                            <span><i class="fas fa-users"></i> 200+ clientes</span>
+                            <span><i class="fas fa-clock"></i> 4 anos exp.</span>
+                        </div>
+                        <div class="barber-services">
+                            <span class="service-tag">Corte</span>
+                            <span class="service-tag">Sobrancelha</span>
+                            <span class="service-tag">Pacote</span>
+                        </div>
+                        <button class="barber-btn" onclick="selectBarber('joao', 'João Vitor Santana')">
+                            Agendar com João
+                        </button>
+                    </div>
+                </div>
+
+                <div class="barber-card" data-barber="samuel">
+                    <div class="barber-image">
+                        <div class="barber-placeholder">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-badge">
+                            <i class="fas fa-star"></i>
+                            <span>5.0</span>
+                        </div>
+                    </div>
+                    <div class="barber-info">
+                        <h3>Samuel Torres</h3>
+                        <p class="barber-specialty">Especialista em Cortes Premium</p>
+                        <div class="barber-stats">
+                            <span><i class="fas fa-users"></i> 300+ clientes</span>
+                            <span><i class="fas fa-clock"></i> 7 anos exp.</span>
+                        </div>
+                        <div class="barber-services">
+                            <span class="service-tag">Corte</span>
+                            <span class="service-tag">Barba</span>
+                            <span class="service-tag">Pacote</span>
+                        </div>
+                        <button class="barber-btn" onclick="selectBarber('samuel', 'Samuel Torres')">
+                            Agendar com Samuel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Price Calculator Section -->
+    <section id="calculator" class="calculator-section">
+        <div class="container">
+            <h2>Calculadora de Preços</h2>
+            <p class="section-subtitle">Selecione os serviços desejados e veja o valor total</p>
+            <div class="calculator-container">
+                <div class="calculator-services">
+                    <h3>Selecione os Serviços</h3>
+                    <div class="calculator-checkboxes">
+                        <label class="calculator-option">
+                            <input type="checkbox" value="corte" data-price="25.00" data-name="Corte Masculino">
+                            <span>Corte Masculino - R$ 25,00</span>
+                        </label>
+                        <label class="calculator-option">
+                            <input type="checkbox" value="barba" data-price="15.00" data-name="Barba">
+                            <span>Barba - R$ 15,00</span>
+                        </label>
+                        <label class="calculator-option">
+                            <input type="checkbox" value="corte_barba" data-price="35.00" data-name="Corte + Barba">
+                            <span>Corte + Barba - R$ 35,00</span>
+                        </label>
+                        <label class="calculator-option">
+                            <input type="checkbox" value="sobrancelha" data-price="10.00" data-name="Sobrancelha">
+                            <span>Sobrancelha - R$ 10,00</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="calculator-result">
+                    <h3>Resumo</h3>
+                    <div class="selected-services-list" id="selectedServicesList">
+                        <p class="no-selection">Nenhum serviço selecionado</p>
+                    </div>
+                    <div class="calculator-total">
+                        <div class="total-line">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">R$ 0,00</span>
+                        </div>
+                        <div class="total-line discount" id="discountLine" style="display: none;">
+                            <span>Desconto (Pacote):</span>
+                            <span id="discount">-R$ 0,00</span>
+                        </div>
+                        <div class="total-line final">
+                            <span>Total:</span>
+                            <span id="total">R$ 0,00</span>
+                        </div>
+                    </div>
+                    <button class="calculator-btn" id="bookSelectedBtn" disabled>
+                        Agendar Serviços Selecionados
+                    </button>
                 </div>
             </div>
         </div>
@@ -282,6 +463,58 @@
             <p>&copy; 2025 Barbearia Style. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <!-- Modal de Detalhes do Serviço -->
+    <div id="serviceModal" class="service-modal" style="display:none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content-service">
+            <button class="modal-close" id="closeServiceModal">&times;</button>
+            <div class="modal-header">
+                <div class="service-icon-large" id="modalServiceIcon">
+                    <i class="fas fa-cut"></i>
+                </div>
+                <h2 id="modalServiceTitle">Corte Masculino</h2>
+            </div>
+            <div class="modal-body">
+                <div class="service-detail-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <div>
+                        <strong>Preço:</strong>
+                        <span id="modalServicePrice">R$ 25,00</span>
+                    </div>
+                </div>
+                <div class="service-detail-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Duração:</strong>
+                        <span id="modalServiceDuration">30 minutos</span>
+                    </div>
+                </div>
+                <div class="service-detail-item">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Descrição:</strong>
+                        <p id="modalServiceDescription">Corte moderno e estiloso realizado por profissionais experientes.</p>
+                    </div>
+                </div>
+                <div class="service-detail-item">
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Inclui:</strong>
+                        <ul id="modalServiceIncludes">
+                            <li>Corte personalizado</li>
+                            <li>Acabamento profissional</li>
+                            <li>Produtos de qualidade</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="addToCalculatorBtn">Adicionar à Calculadora</button>
+                <button class="btn-primary" id="bookServiceBtn">Agendar Este Serviço</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Mensagem de confirmação -->
     <div id="confirmationPopup" class="confirmation-popup" style="display:none;">

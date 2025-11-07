@@ -135,64 +135,170 @@ function initProfileForm() {
 // ============================================
 function initBookingHistory() {
     // Dados de exemplo (em produção viria de uma API)
-    const bookings = [
+    let allBookings = [
         {
+            id: 1,
             date: '15/10/2025',
+            dateObj: new Date(2025, 9, 15),
             time: '14:30',
             service: 'Corte Masculino',
             barber: 'Pedro H.',
             status: 'Concluído'
         },
         {
+            id: 2,
             date: '10/09/2025',
+            dateObj: new Date(2025, 8, 10),
             time: '09:00',
             service: 'Barba',
             barber: 'Luciano S.',
             status: 'Cancelado'
         },
         {
+            id: 3,
             date: '05/08/2025',
+            dateObj: new Date(2025, 7, 5),
             time: '16:00',
             service: 'Corte + Barba',
             barber: 'Samuel T.',
             status: 'Concluído'
         },
         {
+            id: 4,
             date: '20/07/2025',
+            dateObj: new Date(2025, 6, 20),
             time: '11:30',
             service: 'Sobrancelha',
             barber: 'João V.',
             status: 'Concluído'
+        },
+        {
+            id: 5,
+            date: '25/11/2025',
+            dateObj: new Date(2025, 10, 25),
+            time: '15:00',
+            service: 'Corte Masculino',
+            barber: 'Samuel T.',
+            status: 'Futuro'
+        },
+        {
+            id: 6,
+            date: '28/11/2025',
+            dateObj: new Date(2025, 10, 28),
+            time: '10:00',
+            service: 'Barba',
+            barber: 'Pedro H.',
+            status: 'Futuro'
         }
     ];
 
+    // Carrega do localStorage se existir
+    const savedBookings = localStorage.getItem('userBookings');
+    if (savedBookings) {
+        try {
+            const parsed = JSON.parse(savedBookings);
+            parsed.forEach(b => {
+                b.dateObj = new Date(b.dateObj);
+            });
+            allBookings = parsed;
+        } catch (e) {
+            console.error('Erro ao carregar agendamentos:', e);
+        }
+    }
+
     // Renderiza histórico dinamicamente
-    renderBookingHistory(bookings);
+    renderBookingHistory(allBookings);
+    initHistoryFilters(allBookings);
+    updateHistoryStats(allBookings);
+}
+
+// ============================================
+// FILTROS E BUSCA DO HISTÓRICO
+// ============================================
+function initHistoryFilters(allBookings) {
+    const searchInput = document.getElementById('historySearch');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const noResults = document.getElementById('noResults');
+
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    // Busca
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            currentSearch = e.target.value.toLowerCase();
+            filterAndRender();
+        });
+    }
+
+    // Filtros
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFilter = btn.getAttribute('data-filter');
+            filterAndRender();
+        });
+    });
+
+    function filterAndRender() {
+        let filtered = [...allBookings];
+
+        // Aplica filtro de status
+        if (currentFilter !== 'all') {
+            filtered = filtered.filter(booking => {
+                const statusLower = booking.status.toLowerCase();
+                if (currentFilter === 'futuro') {
+                    return statusLower === 'futuro' || (booking.dateObj > new Date() && statusLower !== 'cancelado');
+                }
+                return statusLower === currentFilter;
+            });
+        }
+
+        // Aplica busca
+        if (currentSearch) {
+            filtered = filtered.filter(booking => {
+                return booking.service.toLowerCase().includes(currentSearch) ||
+                       booking.barber.toLowerCase().includes(currentSearch) ||
+                       booking.date.includes(currentSearch) ||
+                       booking.time.includes(currentSearch);
+            });
+        }
+
+        // Renderiza resultados
+        renderBookingHistory(filtered);
+        updateHistoryStats(filtered);
+
+        // Mostra mensagem se não houver resultados
+        if (noResults) {
+            noResults.style.display = filtered.length === 0 ? 'block' : 'none';
+        }
+    }
+
+    window.allBookings = allBookings;
+    window.filterAndRender = filterAndRender;
 }
 
 /**
  * Renderiza o histórico de agendamentos
  */
 function renderBookingHistory(bookings) {
-    const tableBody = document.querySelector('.booking-history tbody');
+    const tableBody = document.getElementById('bookingsTableBody');
     if (!tableBody) return;
 
     // Limpa conteúdo existente
     tableBody.innerHTML = '';
 
     if (bookings.length === 0) {
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="5" style="text-align: center; padding: 2rem; color: #666;">
-                    <i class="fas fa-calendar-times" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                    Nenhum agendamento encontrado
-                </td>
-            </tr>
-        `;
-        return;
+        return; // A mensagem "no results" será mostrada pelo filtro
     }
 
-    bookings.forEach((booking, index) => {
+    // Ordena por data (mais recentes primeiro)
+    const sortedBookings = [...bookings].sort((a, b) => {
+        return b.dateObj - a.dateObj;
+    });
+
+    sortedBookings.forEach((booking, index) => {
         const row = document.createElement('tr');
         row.style.opacity = '0';
         row.style.transform = 'translateX(-20px)';
@@ -202,6 +308,9 @@ function renderBookingHistory(bookings) {
                           booking.status === 'Cancelado' ? 'fa-times-circle' : 
                           'fa-clock';
         
+        const isFuture = booking.status === 'Futuro' || (booking.dateObj > new Date() && booking.status !== 'Cancelado');
+        const canCancel = isFuture && booking.status !== 'Cancelado';
+        
         row.innerHTML = `
             <td>${booking.date}</td>
             <td>${booking.time}</td>
@@ -209,6 +318,11 @@ function renderBookingHistory(bookings) {
             <td>${booking.barber}</td>
             <td class="${statusClass}">
                 <i class="fas ${statusIcon}"></i> ${booking.status}
+            </td>
+            <td class="actions-cell">
+                ${canCancel ? `<button class="cancel-booking-btn" data-id="${booking.id}" title="Cancelar agendamento">
+                    <i class="fas fa-times"></i>
+                </button>` : '-'}
             </td>
         `;
 
@@ -219,8 +333,67 @@ function renderBookingHistory(bookings) {
             row.style.transition = 'all 0.3s ease';
             row.style.opacity = '1';
             row.style.transform = 'translateX(0)';
-        }, index * 100);
+        }, index * 50);
+
+        // Botão de cancelar
+        if (canCancel) {
+            const cancelBtn = row.querySelector('.cancel-booking-btn');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', () => {
+                    cancelBooking(booking.id);
+                });
+            }
+        }
     });
+}
+
+/**
+ * Atualiza estatísticas do histórico
+ */
+function updateHistoryStats(bookings) {
+    const total = bookings.length;
+    const completed = bookings.filter(b => b.status.toLowerCase() === 'concluído').length;
+    const future = bookings.filter(b => {
+        const statusLower = b.status.toLowerCase();
+        return statusLower === 'futuro' || (b.dateObj > new Date() && statusLower !== 'cancelado');
+    }).length;
+
+    const totalElement = document.getElementById('totalBookings');
+    const completedElement = document.getElementById('completedBookings');
+    const futureElement = document.getElementById('futureBookings');
+
+    if (totalElement) totalElement.textContent = total;
+    if (completedElement) completedElement.textContent = completed;
+    if (futureElement) futureElement.textContent = future;
+}
+
+/**
+ * Cancela um agendamento
+ */
+function cancelBooking(bookingId) {
+    if (!confirm('Tem certeza que deseja cancelar este agendamento?')) {
+        return;
+    }
+
+    if (window.allBookings) {
+        const booking = window.allBookings.find(b => b.id === bookingId);
+        if (booking) {
+            booking.status = 'Cancelado';
+            
+            // Salva no localStorage
+            localStorage.setItem('userBookings', JSON.stringify(window.allBookings));
+            
+            // Re-renderiza
+            if (window.filterAndRender) {
+                window.filterAndRender();
+            } else {
+                renderBookingHistory(window.allBookings);
+                updateHistoryStats(window.allBookings);
+            }
+            
+            showNotification('Agendamento cancelado com sucesso', 'success');
+        }
+    }
 }
 
 // ============================================
