@@ -813,16 +813,51 @@ function initPriceCalculator() {
     };
 
     checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateCalculator);
+        checkbox.addEventListener('change', function() {
+            // Se o pacote for selecionado, desmarca e desabilita os serviços individuais
+            if (this.value === 'corte_barba') {
+                const corte = document.querySelector('.calculator-option input[value="corte"]');
+                const barba = document.querySelector('.calculator-option input[value="barba"]');
+
+                if (this.checked) {
+                    if (corte) { corte.checked = false; corte.disabled = true; }
+                    if (barba) { barba.checked = false; barba.disabled = true; }
+                } else {
+                    if (corte) corte.disabled = false;
+                    if (barba) barba.disabled = false;
+                }
+            }
+
+            // Se um serviço individual for marcado, garantir que o pacote não esteja marcado
+            if (this.value === 'corte' || this.value === 'barba') {
+                const pacote = document.querySelector('.calculator-option input[value="corte_barba"]');
+                if (pacote && pacote.checked) {
+                    pacote.checked = false;
+                    // ao desmarcar o pacote, reabilita os individuais
+                    const corte = document.querySelector('.calculator-option input[value="corte"]');
+                    const barba = document.querySelector('.calculator-option input[value="barba"]');
+                    if (corte) corte.disabled = false;
+                    if (barba) barba.disabled = false;
+                }
+            }
+
+            updateCalculator();
+        });
     });
 
     if (bookSelectedBtn) {
         bookSelectedBtn.addEventListener('click', () => {
             const selected = Array.from(checkboxes).filter(cb => cb.checked);
             if (selected.length > 0) {
-                // Preferir pacote (corte_barba) se estiver selecionado, senão pega o primeiro serviço selecionado
+                // Se ambos 'corte' e 'barba' foram selecionados, tratar como pacote 'corte_barba'
+                const hasCorte = selected.some(cb => cb.value === 'corte');
+                const hasBarba = selected.some(cb => cb.value === 'barba');
+                const hasPacote = selected.some(cb => cb.value === 'corte_barba');
+
                 let serviceId = null;
-                if (selected.some(cb => cb.value === 'corte_barba')) {
+                if (hasPacote) {
+                    serviceId = 'corte_barba';
+                } else if (hasCorte && hasBarba) {
                     serviceId = 'corte_barba';
                 } else {
                     serviceId = selected[0].value;
@@ -908,7 +943,8 @@ function initPriceCalculator() {
         const checkbox = document.querySelector(`.calculator-option input[value="${serviceId}"]`);
         if (checkbox && !checkbox.checked) {
             checkbox.checked = true;
-            updateCalculator();
+            // Dispara o evento change para aplicar a mesma lógica de habilitar/desabilitar
+            checkbox.dispatchEvent(new Event('change'));
             showNotification('Serviço adicionado à calculadora!', 'success');
         }
     };
