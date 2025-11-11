@@ -820,6 +820,24 @@ function initPriceCalculator() {
         bookSelectedBtn.addEventListener('click', () => {
             const selected = Array.from(checkboxes).filter(cb => cb.checked);
             if (selected.length > 0) {
+                // Preferir pacote (corte_barba) se estiver selecionado, senão pega o primeiro serviço selecionado
+                let serviceId = null;
+                if (selected.some(cb => cb.value === 'corte_barba')) {
+                    serviceId = 'corte_barba';
+                } else {
+                    serviceId = selected[0].value;
+                }
+
+                // Atualiza o select de serviço na área de agendamento
+                const serviceSelect = document.getElementById('service');
+                if (serviceSelect) {
+                    serviceSelect.value = serviceId;
+                    // Mantém comportamento consistente chamando a função já existente
+                    if (typeof window.selectServiceForBooking === 'function') {
+                        window.selectServiceForBooking(serviceId);
+                    }
+                }
+
                 scrollToSection('booking');
                 showNotification('Selecione data e horário para agendar', 'info');
             }
