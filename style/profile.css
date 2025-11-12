@@ -45,6 +45,7 @@
     font-size: 4rem;
     box-shadow: 0 5px 20px rgba(231, 76, 60, 0.3);
     transition: all 0.3s ease;
+    margin: 0 auto;
 }
 
 .profile-picture-placeholder:hover {
