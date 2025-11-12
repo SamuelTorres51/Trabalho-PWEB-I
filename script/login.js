@@ -285,12 +285,6 @@ function initPasswordToggle() {
             
             this.classList.toggle('fa-eye');
             this.classList.toggle('fa-eye-slash');
-            
-            // Feedback visual
-            this.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                this.style.transform = 'scale(1)';
-            }, 200);
         });
     }
 }
