@@ -297,11 +297,13 @@
 .input-group .toggle-password {
     position: absolute;
     right: 35px;
-    color: #e74c3c;
-    cursor: pointer;
-    background: white; /* faz parecer dentro da caixa */
+    color: #e74c3c; /* faz parecer dentro da caixa */
     padding: 5px;
     border-radius: 50%;
+}
+
+.olho {
+    cursor: pointer;
 }
 
 .input-group input:focus {
