@@ -488,6 +488,7 @@ body.dark-mode .hero {
     text-align: center;
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     animation: popupSlideIn 0.3s ease;
+    overflow: hidden;
 }
 
 @keyframes popupSlideIn {
@@ -1043,6 +1044,11 @@ body.dark-mode .hero {
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.1);
 }
+/* Estilo para o modo escuro */
+body.dark-mode .calculator-services h3,
+body.dark-mode .calculator-result h3 {
+    color: #bfc4cb; /* Cor para o modo escuro */
+}
 
 .calculator-services h3,
 .calculator-result h3 {
@@ -1079,6 +1085,10 @@ body.dark-mode .hero {
     margin-right: 1rem;
     cursor: pointer;
     accent-color: #e74c3c;
+}
+/* Estilo para o modo escuro */
+body.dark-mode .calculator-option span {
+    color: #bfc4cb; /* Cor para o modo escuro */
 }
 
 .calculator-option span {
