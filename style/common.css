@@ -153,6 +153,9 @@ body {
     color: #2c3e50;
 }
 
+body.dark-mode .form-group label {
+    color: #e0e0e0;
+}
 .form-group input,
 .form-group select,
 .form-group textarea {

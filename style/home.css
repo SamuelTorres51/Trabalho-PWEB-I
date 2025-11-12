@@ -1292,3 +1292,137 @@ body.dark-mode .service-price {
         margin-left: 0.5rem;
     }
 }
+
+
+/* --- INÍCIO DAS REGRAS DE MODO ESCURO ADICIONADAS --- */
+
+/* Textos Gerais */
+body.dark-mode .services h2,
+body.dark-mode .booking-section h2,
+body.dark-mode .barbers-section h2 {
+    color: white;
+}
+
+/* Serviços */
+body.dark-mode .service-card h3 {
+    color: white;
+}
+
+body.dark-mode .service-card p {
+    color: #ccc; /* Um cinza claro para contraste */
+}
+
+/* Calendário e Seleção de Horário */
+body.dark-mode .calendar-header h4,
+body.dark-mode .calendar-day-header,
+body.dark-mode .calendar-day {
+    color: white;
+}
+
+body.dark-mode .calendar-container {
+    background: #2d2d2d; /* Fundo do calendário */
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .calendar-day-header {
+    background: #3a3a3a;
+}
+
+body.dark-mode .calendar-day {
+    background: #3a3a3a;
+}
+
+body.dark-mode .calendar-day.disabled {
+    background: #252525;
+    color: #666;
+}
+
+body.dark-mode .time-slots-container h4 {
+    color: white;
+}
+
+body.dark-mode .time-slot {
+    background: #3a3a3a;
+    color: white;
+}
+
+body.dark-mode .time-slot.unavailable {
+    background: #252525;
+    color: #666;
+}
+
+/* Informações Selecionadas */
+body.dark-mode .selected-date-info {
+    background: #252525;
+}
+
+body.dark-mode .selected-date-info p,
+body.dark-mode .selected-info p {
+    color: white;
+}
+
+body.dark-mode .selected-info {
+    background: #252525;
+}
+
+/* Pop-up de Confirmação */
+body.dark-mode .popup-content {
+    background-color: #2d2d2d;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .popup-content p,
+body.dark-mode .popup-content span {
+    color: white;
+}
+
+body.dark-mode .popup-details {
+    border-top: 1px solid #444;
+}
+
+body.dark-mode .close-btn {
+    color: #aaa;
+}
+
+body.dark-mode .close-btn:hover {
+    background: #3a3a3a;
+}
+
+/* Barbeiros */
+body.dark-mode .barber-card {
+    background: #2d2d2d;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .barber-info h3 {
+    color: white;
+}
+
+body.dark-mode .barber-stats {
+    color: #ccc;
+}
+
+body.dark-mode .service-tag {
+    background: #3a3a3a;
+    color: white;
+    border: 1px solid #444;
+}
+
+/* Modal de Serviços */
+body.dark-mode .modal-content-service {
+    background: #2d2d2d;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+body.dark-mode .modal-content-service h3,
+body.dark-mode .modal-content-service p {
+    color: white;
+}
+
+body.dark-mode .modal-content-service ul li {
+    color: white;
+}
+
+body.dark-mode .modal-content-service ul li::before {
+    color: #e74c3c;
+}
