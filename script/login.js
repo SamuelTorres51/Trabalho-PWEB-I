@@ -108,20 +108,34 @@ function initLoginForm() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
         submitBtn.disabled = true;
 
-        // Simula autenticação (em produção seria uma chamada à API)
-        setTimeout(() => {
-            // Salva dados do usuário (simulação)
-            if (rememberCheckbox && rememberCheckbox.checked) {
-                localStorage.setItem('rememberEmail', email);
-            }
+        // Chamada à API de login usando o ApiClient
+        api.login({ email, senha: password })
+            .then(data => {
+                // Salva o token JWT no localStorage
+                localStorage.setItem('authToken', data.token);
 
-            showNotification('Login realizado com sucesso!', 'success');
-            
-            // Redireciona após 1 segundo
-            setTimeout(() => {
-                window.location.href = 'home.html';
-            }, 1000);
-        }, 1500);
+                // Salva dados do usuário
+                localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+                // Salva email se "lembrar de mim" estiver marcado
+                if (rememberCheckbox && rememberCheckbox.checked) {
+                    localStorage.setItem('rememberEmail', email);
+                } else {
+                    localStorage.removeItem('rememberEmail');
+                }
+
+                showNotification('Login realizado com sucesso!', 'success');
+
+                // Redireciona após 1 segundo
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1000);
+            })
+            .catch(error => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                showNotification(error.message, 'error');
+            });
     });
 
     // Preenche email lembrado
@@ -247,15 +261,33 @@ function initCadastroForm() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
         submitBtn.disabled = true;
 
-        // Simula cadastro (em produção seria uma chamada à API)
-        setTimeout(() => {
-            showNotification('Cadastro realizado com sucesso!', 'success');
-            
-            // Redireciona após 1 segundo
-            setTimeout(() => {
-                window.location.href = 'home.html';
-            }, 1000);
-        }, 1500);
+        // Chamada à API de cadastro usando o ApiClient
+        api.cadastro({
+            nomeCompleto: name,
+            telefone: phone,
+            email: email,
+            senha: password,
+            dataNascimento: birthdate
+        })
+            .then(data => {
+                // Salva o token JWT no localStorage
+                localStorage.setItem('authToken', data.token);
+
+                // Salva dados do usuário
+                localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+                showNotification('Cadastro realizado com sucesso!', 'success');
+
+                // Redireciona após 1 segundo
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1000);
+            })
+            .catch(error => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                showNotification(error.message, 'error');
+            });
     });
 
     // Validação em tempo real da confirmação de senha

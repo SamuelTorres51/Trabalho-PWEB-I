@@ -28,22 +28,66 @@ function initApp() {
 // 1. SAUDAÇÃO DINÂMICA
 // ============================================
 function initGreeting() {
+    // Verifica se o usuário está autenticado
+    const authToken = localStorage.getItem('authToken');
+    const usuarioData = localStorage.getItem('usuario');
+
+    const greetingContainer = document.querySelector('.greeting');
+    const userNameElement = document.getElementById('userName');
+
+    // Sempre exibe a saudação
+    if (greetingContainer) {
+        greetingContainer.style.display = 'flex';
+    }
+
+    // Se não estiver autenticado, oculta apenas o nome do usuário
+    if (!authToken || !usuarioData) {
+        if (userNameElement) {
+            userNameElement.style.display = 'none';
+        }
+    } else {
+        // Se estiver autenticado, exibe o nome
+        if (userNameElement) {
+            userNameElement.style.display = 'inline';
+        }
+
+        // Atualiza o nome do usuário
+        try {
+            const usuario = JSON.parse(usuarioData);
+            if (userNameElement && usuario.nomeCompleto) {
+                // Pega o primeiro nome e a inicial do sobrenome
+                const nomePartes = usuario.nomeCompleto.split(' ');
+                const primeiroNome = nomePartes[0];
+                const inicialSobrenome = nomePartes.length > 1 ? nomePartes[nomePartes.length - 1].charAt(0) + '.' : '';
+                userNameElement.textContent = `${primeiroNome} ${inicialSobrenome}`;
+            }
+        } catch (e) {
+            console.error('Erro ao parsear dados do usuário:', e);
+        }
+    }
+
     function updateGreeting() {
         const now = new Date();
         const hour = now.getHours();
         let greeting = '';
 
         if (hour >= 5 && hour < 12) {
-            greeting = 'Bom dia,';
+            greeting = 'Bom dia';
         } else if (hour >= 12 && hour < 18) {
-            greeting = 'Boa tarde,';
+            greeting = 'Boa tarde';
         } else {
-            greeting = 'Boa noite,';
+            greeting = 'Boa noite';
         }
 
         const greetingElement = document.getElementById('greeting');
         if (greetingElement) {
-            greetingElement.textContent = greeting;
+            // Se estiver autenticado, adiciona vírgula após a saudação
+            if (authToken && usuarioData) {
+                greetingElement.textContent = greeting + ',';
+            } else {
+                // Se não estiver autenticado, não adiciona vírgula
+                greetingElement.textContent = greeting;
+            }
         }
     }
 
@@ -61,11 +105,27 @@ function initUserDropdown() {
 
     if (!userBtn || !dropdownMenu) return;
 
+    // Verifica se o usuário está autenticado
+    const authToken = localStorage.getItem('authToken');
+    const usuarioData = localStorage.getItem('usuario');
+
+    // Atualiza o conteúdo do dropdown baseado no estado de autenticação
+    if (!authToken || !usuarioData) {
+        // Não autenticado: mostra apenas opção de fazer login
+        dropdownMenu.innerHTML = '<a href="/index/login.html">Fazer Login</a>';
+    } else {
+        // Autenticado: mostra perfil e sair
+        dropdownMenu.innerHTML = `
+            <a href="/index/profile.html">Perfil</a>
+            <a href="#" id="logoutLink">Sair</a>
+        `;
+    }
+
     userBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isVisible = dropdownMenu.style.display === 'block';
         dropdownMenu.style.display = isVisible ? 'none' : 'block';
-        
+
         // Adiciona animação
         if (!isVisible) {
             dropdownMenu.style.opacity = '0';
@@ -84,6 +144,21 @@ function initUserDropdown() {
             dropdownMenu.style.display = 'none';
         }
     });
+
+    // Adiciona evento de logout (se estiver autenticado)
+    if (authToken && usuarioData) {
+        const logoutLink = document.getElementById('logoutLink');
+        if (logoutLink) {
+            logoutLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                // Remove dados de autenticação
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('usuario');
+                // Redireciona para login
+                window.location.href = '/index/login.html';
+            });
+        }
+    }
 }
 
 // ============================================
@@ -157,8 +232,23 @@ function initNavigation() {
         anchor.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
             if (href === '#') return;
-            
+
             e.preventDefault();
+
+            // Verifica se está tentando agendar sem estar autenticado
+            if (href === '#booking') {
+                const authToken = localStorage.getItem('authToken');
+                const usuarioData = localStorage.getItem('usuario');
+
+                if (!authToken || !usuarioData) {
+                    showNotification('Faça login para realizar um agendamento', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/index/login.html';
+                    }, 1500);
+                    return;
+                }
+            }
+
             const target = document.querySelector(href);
             if (target) {
                 const headerOffset = 80;
@@ -238,6 +328,18 @@ function initCalendar() {
             calendarGrid.appendChild(dayDiv);
 
             dayDiv.addEventListener('click', () => {
+                // Verifica se o usuário está autenticado
+                const authToken = localStorage.getItem('authToken');
+                const usuarioData = localStorage.getItem('usuario');
+
+                if (!authToken || !usuarioData) {
+                    showNotification('Faça login para realizar um agendamento', 'error');
+                    setTimeout(() => {
+                        window.location.href = '/index/login.html';
+                    }, 1500);
+                    return;
+                }
+
                 if (dayDiv.classList.contains('disabled')) {
                     showNotification('Não é possível agendar em datas passadas', 'error');
                     return;
@@ -259,7 +361,9 @@ function initCalendar() {
                 window.selectedDate = dateObj;
 
                 // Renderiza horários disponíveis
-                renderTimeSlots(dateObj);
+                // Se houver barbeiro selecionado, filtra por ele
+                const barberName = window.selectedBarber ? window.selectedBarber.name : null;
+                renderTimeSlots(dateObj, barberName);
 
                 // Transição suave para próxima etapa
                 setTimeout(() => {
@@ -313,28 +417,47 @@ function initBookingSystem() {
 
     if (!timeSlotsContainer || !bookingForm) return;
 
-    const workingHours = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', 
+    const workingHours = ['08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
                          '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00'];
 
-    // Horários já ocupados (simulação - em produção viria de uma API)
-    const occupiedSlots = ['14:00', '16:00'];
-
     // Renderiza horários disponíveis
-    window.renderTimeSlots = function(date) {
+    window.renderTimeSlots = async function(date, nomeBarbeiro = null) {
         if (!timeSlotsContainer) return;
-        
+
         timeSlotsContainer.innerHTML = '';
-        
+
         // Adiciona loading
         const loading = document.createElement('div');
         loading.classList.add('loading-slots');
         loading.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando horários...';
         timeSlotsContainer.appendChild(loading);
 
-        // Simula carregamento
+        // Busca horários bloqueados para a data selecionada
+        const dataFormatada = formatDateForAPI(date);
+        let occupiedSlots = [];
+
+        try {
+            let horariosBloqueados;
+
+            // Se tem barbeiro selecionado, busca apenas os horários dele
+            if (nomeBarbeiro) {
+                horariosBloqueados = await api.listarHorariosBloqueadosPorBarbeiroEData(nomeBarbeiro, dataFormatada);
+            } else {
+                // Se não tem barbeiro, busca todos os horários bloqueados da data
+                horariosBloqueados = await api.listarHorariosBloqueadosPorData(dataFormatada);
+            }
+
+            // Extrai apenas os horários
+            occupiedSlots = horariosBloqueados.map(h => h.horario);
+        } catch (error) {
+            console.error('Erro ao buscar horários bloqueados:', error);
+            // Continua sem os horários bloqueados
+        }
+
+        // Renderiza horários
         setTimeout(() => {
             timeSlotsContainer.innerHTML = '';
-            
+
             workingHours.forEach(hour => {
                 const slot = document.createElement('div');
                 slot.classList.add('time-slot');
@@ -347,12 +470,12 @@ function initBookingSystem() {
                 if (slotDate < now) {
                     slot.classList.add('unavailable');
                     slot.title = 'Horário já passou';
-                } 
-                // Verifica se está ocupado
-                else if (occupiedSlots.includes(hour)) {
-                    slot.classList.add('unavailable');
-                    slot.title = 'Horário já ocupado';
-                } 
+                }
+                // Se tem barbeiro selecionado E o horário está ocupado para esse barbeiro
+                else if (nomeBarbeiro && occupiedSlots.includes(hour)) {
+                    slot.classList.add('unavailable-striked');
+                    slot.title = `Horário ocupado para ${nomeBarbeiro}`;
+                }
                 // Horário disponível
                 else {
                     slot.title = 'Clique para selecionar';
@@ -362,18 +485,30 @@ function initBookingSystem() {
                 timeSlotsContainer.appendChild(slot);
 
                 slot.addEventListener('click', () => {
-                    if (slot.classList.contains('unavailable')) {
-                        showNotification('Este horário não está disponível', 'error');
+                    // Horários passados não podem ser selecionados
+                    if (slotDate < now) {
+                        showNotification('Este horário já passou', 'error');
+                        return;
+                    }
+
+                    // Se tem barbeiro selecionado e o horário está ocupado
+                    if (nomeBarbeiro && occupiedSlots.includes(hour)) {
+                        showNotification(`Este horário não está disponível para ${nomeBarbeiro}`, 'error');
                         return;
                     }
 
                     document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
                     slot.classList.add('selected');
-                    
+
                     window.selectedTime = hour;
-                    
+
                     const selectedInfoTime = document.querySelector('.selected-info p:nth-child(2) span');
                     if (selectedInfoTime) selectedInfoTime.textContent = hour;
+
+                    // Se não há barbeiro selecionado, filtra os barbeiros disponíveis para este horário
+                    if (!nomeBarbeiro && window.selectedDate) {
+                        filterAvailableBarbers(window.selectedDate, hour);
+                    }
 
                     // Transição suave para próxima etapa
                     setTimeout(() => {
@@ -397,6 +532,10 @@ function initBookingSystem() {
             });
         }, 500);
     };
+
+    // Listener para mudança de barbeiro - re-renderiza horários
+    const barberSelect = document.getElementById('barber');
+   
 
     // Validação e submissão do formulário
     bookingForm.addEventListener('submit', function(e) {
@@ -429,76 +568,63 @@ function initBookingSystem() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Agendando...';
         submitBtn.disabled = true;
 
-        // Simula processamento
-        setTimeout(() => {
-            const selectedDate = document.querySelector('.selected-info p span').textContent;
-            const selectedTime = document.querySelector('.selected-info p:nth-child(2) span').textContent;
-            const serviceText = service.selectedOptions[0].textContent;
-            const barberText = barber.selectedOptions[0].textContent;
+        const selectedDate = document.querySelector('.selected-info p span').textContent;
+        const selectedTime = document.querySelector('.selected-info p:nth-child(2) span').textContent;
+        const serviceText = service.selectedOptions[0].textContent;
+        const barberText = barber.selectedOptions[0].textContent;
 
-            // Salva agendamento no localStorage
-            const booking = {
-                id: Date.now(),
-                date: formatDateForStorage(window.selectedDate),
-                dateObj: window.selectedDate,
-                time: window.selectedTime,
-                service: serviceText.split(' - ')[0], // Remove o preço
-                barber: barberText,
-                status: 'Futuro'
-            };
+        // Prepara dados para enviar à API
+        const dadosAgendamento = {
+            nomeBarbeiro: barberText,
+            nomeServico: serviceText.split(' - ')[0], // Remove o preço
+            data: formatDateForAPI(window.selectedDate), // YYYY-MM-DD
+            horario: window.selectedTime, // HH:MM
+            observacoes: document.getElementById('notes')?.value || undefined
+        };
 
-            // Carrega agendamentos existentes
-            let bookings = [];
-            const savedBookings = localStorage.getItem('userBookings');
-            if (savedBookings) {
-                try {
-                    bookings = JSON.parse(savedBookings);
-                    bookings.forEach(b => {
-                        b.dateObj = new Date(b.dateObj);
-                    });
-                } catch (e) {
-                    console.error('Erro ao carregar agendamentos:', e);
+        // Cria agendamento via API
+        api.criarAgendamento(dadosAgendamento)
+            .then(agendamento => {
+                // Preenche o popup
+                const popupDate = document.getElementById('popupDate');
+                const popupTime = document.getElementById('popupTime');
+                const popupService = document.getElementById('popupService');
+                const popupBarber = document.getElementById('popupBarber');
+
+                if (popupDate) popupDate.textContent = selectedDate;
+                if (popupTime) popupTime.textContent = selectedTime;
+                if (popupService) popupService.textContent = serviceText;
+                if (popupBarber) popupBarber.textContent = barberText;
+
+                // Exibe o popup
+                if (confirmationPopup) {
+                    confirmationPopup.style.display = 'flex';
+                    confirmationPopup.style.opacity = '0';
+                    setTimeout(() => {
+                        confirmationPopup.style.transition = 'opacity 0.3s ease';
+                        confirmationPopup.style.opacity = '1';
+                    }, 10);
                 }
-            }
 
-            // Adiciona novo agendamento
-            bookings.push(booking);
-            localStorage.setItem('userBookings', JSON.stringify(bookings));
+                // Reseta o formulário
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                bookingForm.reset();
 
-            // Preenche o popup
-            const popupDate = document.getElementById('popupDate');
-            const popupTime = document.getElementById('popupTime');
-            const popupService = document.getElementById('popupService');
-            const popupBarber = document.getElementById('popupBarber');
+                // Limpa seleções
+                window.selectedDate = null;
+                window.selectedTime = null;
 
-            if (popupDate) popupDate.textContent = selectedDate;
-            if (popupTime) popupTime.textContent = selectedTime;
-            if (popupService) popupService.textContent = serviceText;
-            if (popupBarber) popupBarber.textContent = barberText;
+                if (stepService) stepService.classList.remove('active');
 
-            // Exibe o popup
-            if (confirmationPopup) {
-                confirmationPopup.style.display = 'flex';
-                confirmationPopup.style.opacity = '0';
-                setTimeout(() => {
-                    confirmationPopup.style.transition = 'opacity 0.3s ease';
-                    confirmationPopup.style.opacity = '1';
-                }, 10);
-            }
-
-            // Reseta o formulário
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            bookingForm.reset();
-            
-            // Limpa seleções
-            window.selectedDate = null;
-            window.selectedTime = null;
-            
-            if (stepService) stepService.classList.remove('active');
-            
-            showNotification('Agendamento realizado com sucesso!', 'success');
-        }, 1500);
+                showNotification('Agendamento realizado com sucesso!', 'success');
+            })
+            .catch(error => {
+                console.error('Erro ao criar agendamento:', error);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                showNotification(error.message || 'Erro ao criar agendamento', 'error');
+            });
     });
 
     // Fechar popup
@@ -529,17 +655,23 @@ function initBookingSystem() {
         btn.addEventListener('click', function() {
             const targetStep = this.getAttribute('data-step-back');
             const currentStep = this.closest('.booking-step');
-            
+
             if (currentStep) {
                 currentStep.classList.remove('active');
             }
-            
+
             if (targetStep === 'calendar') {
                 document.getElementById('step-calendar').classList.add('active');
+                // Restaura lista completa de barbeiros ao voltar para o calendário
+                restoreAllBarbers();
             } else if (targetStep === 'time') {
                 document.getElementById('step-time').classList.add('active');
+                // Se voltar para seleção de horário sem barbeiro, restaura lista completa
+                if (!window.selectedBarber) {
+                    restoreAllBarbers();
+                }
             }
-            
+
             scrollToSection('booking');
         });
     });
@@ -562,6 +694,18 @@ function initServiceCards() {
 
         // Ao clicar, rola até o agendamento
         card.addEventListener('click', function() {
+            // Verifica se o usuário está autenticado
+            const authToken = localStorage.getItem('authToken');
+            const usuarioData = localStorage.getItem('usuario');
+
+            if (!authToken || !usuarioData) {
+                showNotification('Faça login para realizar um agendamento', 'error');
+                setTimeout(() => {
+                    window.location.href = '/index/login.html';
+                }, 1500);
+                return;
+            }
+
             scrollToSection('booking');
             showNotification('Selecione uma data e horário para agendar', 'info');
         });
@@ -969,12 +1113,45 @@ function initBarbersSection() {
 
 // Função global para selecionar barbeiro
 window.selectBarber = function(barberId, barberName) {
+    // Verifica se o usuário está autenticado
+    const authToken = localStorage.getItem('authToken');
+    const usuarioData = localStorage.getItem('usuario');
+
+    if (!authToken || !usuarioData) {
+        showNotification('Faça login para realizar um agendamento', 'error');
+        setTimeout(() => {
+            window.location.href = '/index/login.html';
+        }, 1500);
+        return;
+    }
+
+    // Remove seleção de todos os cards de barbeiro
+    document.querySelectorAll('.barber-card').forEach(card => {
+        card.classList.remove('selected-barber');
+        card.style.border = '';
+        card.style.boxShadow = '';
+    });
+
+    // Adiciona classe ao card selecionado
+    const selectedCard = document.querySelector(`.barber-card[data-barber="${barberId}"]`);
+    if (selectedCard) {
+        selectedCard.classList.add('selected-barber');
+        selectedCard.style.border = '2px solid #e74c3c';
+        selectedCard.style.boxShadow = '0 8px 24px rgba(231, 76, 60, 0.3)';
+    }
+
+    // Salva o barbeiro selecionado globalmente
+    window.selectedBarber = {
+        id: barberId,
+        name: barberName
+    };
+
     const barberSelect = document.getElementById('barber');
     if (barberSelect) {
         barberSelect.value = barberId;
         scrollToSection('booking');
-        showNotification(`Barbeiro ${barberName} selecionado!`, 'success');
-        
+        showNotification(`Barbeiro ${barberName} selecionado! Agora escolha uma data.`, 'success');
+
         // Se já estiver na etapa de serviço, destaca o select
         const stepService = document.getElementById('step-service');
         if (stepService && stepService.classList.contains('active')) {
@@ -985,16 +1162,128 @@ window.selectBarber = function(barberId, barberName) {
             }, 2000);
         }
     }
+
+    // Se já houver uma data selecionada, re-renderiza os horários com o filtro do barbeiro
+    if (window.selectedDate) {
+        renderTimeSlots(window.selectedDate, barberName);
+        // Volta para a etapa de horário se já passou
+        const stepTime = document.getElementById('step-time');
+        const stepCalendar = document.getElementById('step-calendar');
+        const stepService = document.getElementById('step-service');
+
+        if (stepService && stepService.classList.contains('active')) {
+            stepService.classList.remove('active');
+            stepTime.classList.add('active');
+        } else if (stepCalendar && !stepCalendar.classList.contains('active')) {
+            stepTime.classList.add('active');
+        }
+
+        showNotification(`Mostrando horários disponíveis para ${barberName}`, 'info');
+    }
 };
 
 // Função para selecionar serviço para agendamento
 window.selectServiceForBooking = function(serviceId) {
+    // Verifica se o usuário está autenticado
+    const authToken = localStorage.getItem('authToken');
+    const usuarioData = localStorage.getItem('usuario');
+
+    if (!authToken || !usuarioData) {
+        showNotification('Faça login para realizar um agendamento', 'error');
+        setTimeout(() => {
+            window.location.href = '/index/login.html';
+        }, 1500);
+        return;
+    }
+
     const serviceSelect = document.getElementById('service');
     if (serviceSelect) {
         serviceSelect.value = serviceId;
         showNotification('Serviço selecionado! Agora escolha data e horário.', 'success');
     }
 };
+
+/**
+ * Restaura a lista completa de barbeiros no select
+ */
+function restoreAllBarbers() {
+    const barberSelect = document.getElementById('barber');
+    if (barberSelect) {
+        const todosBarbeiros = [
+            { id: 'luciano', name: 'Luciano Sousa Barbosa' },
+            { id: 'pedro', name: 'Pedro Henrique Rodrigues' },
+            { id: 'joao', name: 'João Vitor Santana' },
+            { id: 'samuel', name: 'Samuel Torres' }
+        ];
+
+        barberSelect.innerHTML = '<option value="">Selecione um barbeiro</option>';
+        todosBarbeiros.forEach(barbeiro => {
+            const option = document.createElement('option');
+            option.value = barbeiro.id;
+            option.textContent = barbeiro.name;
+            barberSelect.appendChild(option);
+        });
+        barberSelect.disabled = false;
+    }
+}
+
+/**
+ * Filtra barbeiros disponíveis baseado no horário selecionado
+ */
+async function filterAvailableBarbers(date, horario) {
+    const dataFormatada = formatDateForAPI(date);
+
+    try {
+        // Busca todos os horários bloqueados para esta data
+        const horariosBloqueados = await api.listarHorariosBloqueadosPorData(dataFormatada);
+
+        // Filtra apenas os horários bloqueados para o horário específico selecionado
+        const barbeirosOcupados = horariosBloqueados
+            .filter(h => h.horario === horario)
+            .map(h => h.nomeBarbeiro);
+
+        // Lista de todos os barbeiros disponíveis
+        const todosBarbeiros = [
+            { id: 'luciano', name: 'Luciano Sousa Barbosa' },
+            { id: 'pedro', name: 'Pedro Henrique Rodrigues' },
+            { id: 'joao', name: 'João Vitor Santana' },
+            { id: 'samuel', name: 'Samuel Torres' }
+        ];
+
+        // Filtra apenas os barbeiros disponíveis (que não estão ocupados)
+        const barbeirosDisponiveis = todosBarbeiros.filter(
+            barbeiro => !barbeirosOcupados.includes(barbeiro.name)
+        );
+
+        // Atualiza o select de barbeiros
+        const barberSelect = document.getElementById('barber');
+        if (barberSelect) {
+            // Limpa as opções atuais (exceto a primeira - placeholder)
+            barberSelect.innerHTML = '<option value="">Selecione um barbeiro</option>';
+
+            // Adiciona apenas os barbeiros disponíveis
+            barbeirosDisponiveis.forEach(barbeiro => {
+                const option = document.createElement('option');
+                option.value = barbeiro.id;
+                option.textContent = barbeiro.name;
+                barberSelect.appendChild(option);
+            });
+
+            // Se nenhum barbeiro está disponível
+            if (barbeirosDisponiveis.length === 0) {
+                barberSelect.innerHTML = '<option value="">Nenhum barbeiro disponível neste horário</option>';
+                barberSelect.disabled = true;
+                showNotification('Nenhum barbeiro disponível neste horário. Selecione outro horário.', 'warning');
+            } else {
+                barberSelect.disabled = false;
+                showNotification(`${barbeirosDisponiveis.length} barbeiro(s) disponível(is) para este horário`, 'success');
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao filtrar barbeiros disponíveis:', error);
+        showNotification('Erro ao buscar barbeiros disponíveis', 'error');
+    }
+}
 
 /**
  * Formata data para armazenamento
@@ -1005,4 +1294,15 @@ function formatDateForStorage(date) {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+}
+
+/**
+ * Formata data para enviar à API (YYYY-MM-DD)
+ */
+function formatDateForAPI(date) {
+    if (!date) return '';
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
 }

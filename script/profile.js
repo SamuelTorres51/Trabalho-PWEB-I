@@ -93,32 +93,42 @@ function initProfileForm() {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
         submitBtn.disabled = true;
 
-        // Simula salvamento (em produção seria uma chamada à API)
-        setTimeout(() => {
-            // Atualiza dados exibidos
-            updateProfileDisplay(fullName, email, phone);
-            
-            // Salva no localStorage (simulação)
-            localStorage.setItem('userName', fullName);
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('userPhone', phone);
-            if (password) {
-                localStorage.setItem('userPassword', password);
-            }
-            if (notes) {
-                localStorage.setItem('userNotes', notes);
-            }
+        // Prepara dados para enviar
+        const dadosAtualizacao = {
+            nomeCompleto: fullName,
+            telefone: phone,
+            observacoes: notes || undefined
+        };
 
-            showNotification('Perfil atualizado com sucesso!', 'success');
-            
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-            
-            // Limpa campo de senha se foi alterado
-            if (password) {
-                passwordInput.value = '';
-            }
-        }, 1500);
+        // Adiciona senha se foi preenchida
+        if (password) {
+            dadosAtualizacao.senha = password;
+        }
+
+        // Chama API para atualizar perfil
+        api.atualizarPerfil(dadosAtualizacao)
+            .then(usuario => {
+                // Atualiza dados exibidos
+                updateProfileDisplay(fullName, email, phone);
+
+                // Atualiza localStorage
+                localStorage.setItem('usuario', JSON.stringify(usuario));
+
+                showNotification('Perfil atualizado com sucesso!', 'success');
+
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+
+                // Limpa campo de senha se foi alterado
+                if (password) {
+                    passwordInput.value = '';
+                }
+            })
+            .catch(error => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                showNotification(error.message || 'Erro ao atualizar perfil', 'error');
+            });
     });
 
     // Validação em tempo real
@@ -134,82 +144,50 @@ function initProfileForm() {
 // 2. HISTÓRICO DE AGENDAMENTOS
 // ============================================
 function initBookingHistory() {
-    // Dados de exemplo (em produção viria de uma API)
-    let allBookings = [
-        {
-            id: 1,
-            date: '15/10/2025',
-            dateObj: new Date(2025, 9, 15),
-            time: '14:30',
-            service: 'Corte Masculino',
-            barber: 'Pedro H.',
-            status: 'Concluído'
-        },
-        {
-            id: 2,
-            date: '10/09/2025',
-            dateObj: new Date(2025, 8, 10),
-            time: '09:00',
-            service: 'Barba',
-            barber: 'Luciano S.',
-            status: 'Cancelado'
-        },
-        {
-            id: 3,
-            date: '05/08/2025',
-            dateObj: new Date(2025, 7, 5),
-            time: '16:00',
-            service: 'Corte + Barba',
-            barber: 'Samuel T.',
-            status: 'Concluído'
-        },
-        {
-            id: 4,
-            date: '20/07/2025',
-            dateObj: new Date(2025, 6, 20),
-            time: '11:30',
-            service: 'Sobrancelha',
-            barber: 'João V.',
-            status: 'Concluído'
-        },
-        {
-            id: 5,
-            date: '25/11/2025',
-            dateObj: new Date(2025, 10, 25),
-            time: '15:00',
-            service: 'Corte Masculino',
-            barber: 'Samuel T.',
-            status: 'Futuro'
-        },
-        {
-            id: 6,
-            date: '28/11/2025',
-            dateObj: new Date(2025, 10, 28),
-            time: '10:00',
-            service: 'Barba',
-            barber: 'Pedro H.',
-            status: 'Futuro'
-        }
-    ];
+    // Busca agendamentos da API
+    api.listarMeusAgendamentos()
+        .then(agendamentos => {
+            // Converte para o formato esperado pelo frontend
+            const allBookings = agendamentos.map(ag => {
+                // Converte data YYYY-MM-DD para DD/MM/YYYY
+                const dateParts = ag.data.split('-');
+                const dateFormatted = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
 
-    // Carrega do localStorage se existir
-    const savedBookings = localStorage.getItem('userBookings');
-    if (savedBookings) {
-        try {
-            const parsed = JSON.parse(savedBookings);
-            parsed.forEach(b => {
-                b.dateObj = new Date(b.dateObj);
+                return {
+                    id: ag.id,
+                    date: dateFormatted,
+                    dateObj: new Date(ag.data),
+                    time: ag.horario,
+                    service: ag.nomeServico,
+                    barber: ag.nomeBarbeiro,
+                    status: capitalizeStatus(ag.status)
+                };
             });
-            allBookings = parsed;
-        } catch (e) {
-            console.error('Erro ao carregar agendamentos:', e);
-        }
-    }
 
-    // Renderiza histórico dinamicamente
-    renderBookingHistory(allBookings);
-    initHistoryFilters(allBookings);
-    updateHistoryStats(allBookings);
+            // Renderiza histórico dinamicamente
+            renderBookingHistory(allBookings);
+            initHistoryFilters(allBookings);
+            updateHistoryStats(allBookings);
+        })
+        .catch(error => {
+            console.error('Erro ao carregar agendamentos:', error);
+            showNotification('Erro ao carregar agendamentos', 'error');
+            // Renderiza vazio em caso de erro
+            renderBookingHistory([]);
+            initHistoryFilters([]);
+            updateHistoryStats([]);
+        });
+}
+
+function capitalizeStatus(status) {
+    const statusMap = {
+        'pendente': 'Pendente',
+        'confirmado': 'Confirmado',
+        'concluido': 'Concluído',
+        'cancelado': 'Cancelado',
+        'futuro': 'Futuro'
+    };
+    return statusMap[status] || status;
 }
 
 // ============================================
@@ -302,15 +280,15 @@ function renderBookingHistory(bookings) {
         const row = document.createElement('tr');
         row.style.opacity = '0';
         row.style.transform = 'translateX(-20px)';
-        
+
         const statusClass = booking.status.toLowerCase();
-        const statusIcon = booking.status === 'Concluído' ? 'fa-check-circle' : 
-                          booking.status === 'Cancelado' ? 'fa-times-circle' : 
+        const statusIcon = booking.status === 'Concluído' ? 'fa-check-circle' :
+                          booking.status === 'Cancelado' ? 'fa-times-circle' :
                           'fa-clock';
-        
+
         const isFuture = booking.status === 'Futuro' || (booking.dateObj > new Date() && booking.status !== 'Cancelado');
         const canCancel = isFuture && booking.status !== 'Cancelado';
-        
+
         row.innerHTML = `
             <td>${booking.date}</td>
             <td>${booking.time}</td>
@@ -375,25 +353,17 @@ function cancelBooking(bookingId) {
         return;
     }
 
-    if (window.allBookings) {
-        const booking = window.allBookings.find(b => b.id === bookingId);
-        if (booking) {
-            booking.status = 'Cancelado';
-            
-            // Salva no localStorage
-            localStorage.setItem('userBookings', JSON.stringify(window.allBookings));
-            
-            // Re-renderiza
-            if (window.filterAndRender) {
-                window.filterAndRender();
-            } else {
-                renderBookingHistory(window.allBookings);
-                updateHistoryStats(window.allBookings);
-            }
-            
+    // Chama API para cancelar
+    api.cancelarAgendamento(bookingId)
+        .then(() => {
             showNotification('Agendamento cancelado com sucesso', 'success');
-        }
-    }
+            // Recarrega a lista de agendamentos
+            initBookingHistory();
+        })
+        .catch(error => {
+            console.error('Erro ao cancelar agendamento:', error);
+            showNotification(error.message || 'Erro ao cancelar agendamento', 'error');
+        });
 }
 
 // ============================================
@@ -481,25 +451,49 @@ function initNavigation() {
 // 5. CARREGAR DADOS DO USUÁRIO
 // ============================================
 function loadUserData() {
-    // Carrega dados do localStorage (simulação)
-    const userName = localStorage.getItem('userName') || 'Matheus M.';
-    const userEmail = localStorage.getItem('userEmail') || 'matheus@email.com';
-    const userPhone = localStorage.getItem('userPhone') || '(11) 99999-9999';
-    const userNotes = localStorage.getItem('userNotes') || '';
+    // Primeiro tenta carregar do localStorage
+    const usuarioData = localStorage.getItem('usuario');
+    if (usuarioData) {
+        try {
+            const usuario = JSON.parse(usuarioData);
+            preencherFormulario(usuario);
+            return;
+        } catch (e) {
+            console.error('Erro ao parsear dados do usuário:', e);
+        }
+    }
 
+    // Se não tiver no localStorage, busca da API
+    api.buscarPerfil()
+        .then(usuario => {
+            preencherFormulario(usuario);
+            // Atualiza localStorage
+            localStorage.setItem('usuario', JSON.stringify(usuario));
+        })
+        .catch(error => {
+            console.error('Erro ao carregar perfil:', error);
+            showNotification('Erro ao carregar dados do perfil', 'error');
+        });
+}
+
+function preencherFormulario(usuario) {
     // Atualiza campos do formulário
     const fullNameInput = document.getElementById('fullName');
     const emailInput = document.getElementById('email');
     const phoneInput = document.getElementById('phone');
     const notesInput = document.getElementById('notes');
 
-    if (fullNameInput) fullNameInput.value = userName;
-    if (emailInput) emailInput.value = userEmail;
-    if (phoneInput) phoneInput.value = userPhone;
-    if (notesInput) notesInput.value = userNotes;
+    if (fullNameInput) fullNameInput.value = usuario.nomeCompleto || '';
+    if (emailInput) emailInput.value = usuario.email || '';
+    if (phoneInput) phoneInput.value = usuario.telefone || '';
+    if (notesInput && usuario.observacoes) notesInput.value = usuario.observacoes;
 
     // Atualiza sidebar
-    updateProfileDisplay(userName, userEmail, userPhone);
+    updateProfileDisplay(
+        usuario.nomeCompleto || '',
+        usuario.email || '',
+        usuario.telefone || ''
+    );
 }
 
 /**

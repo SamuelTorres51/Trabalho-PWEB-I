@@ -397,6 +397,26 @@ body.dark-mode .hero {
     text-decoration: line-through;
 }
 
+.time-slot.unavailable-striked {
+    background: #d3d3d3;
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: line-through;
+    position: relative;
+}
+
+.time-slot.unavailable-striked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: #e74c3c;
+    transform: translateY(-50%);
+}
+
 /* Example selected time slot */
 .time-slot:nth-child() {
     background: #e74c3c;
@@ -1349,6 +1369,11 @@ body.dark-mode .time-slot {
 body.dark-mode .time-slot.unavailable {
     background: #252525;
     color: #666;
+}
+
+body.dark-mode .time-slot.unavailable-striked {
+    background: #1a1a1a;
+    color: #555;
 }
 
 /* Informações Selecionadas */
