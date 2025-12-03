@@ -112,11 +112,11 @@ function initUserDropdown() {
     // Atualiza o conteúdo do dropdown baseado no estado de autenticação
     if (!authToken || !usuarioData) {
         // Não autenticado: mostra apenas opção de fazer login
-        dropdownMenu.innerHTML = '<a href="/index/login.html">Fazer Login</a>';
+        dropdownMenu.innerHTML = '<a href="/web/index/login.html">Fazer Login</a>';
     } else {
         // Autenticado: mostra perfil e sair
         dropdownMenu.innerHTML = `
-            <a href="/index/profile.html">Perfil</a>
+            <a href="/web/index/profile.html">Perfil</a>
             <a href="#" id="logoutLink">Sair</a>
         `;
     }
@@ -155,7 +155,7 @@ function initUserDropdown() {
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('usuario');
                 // Redireciona para login
-                window.location.href = '/index/login.html';
+                window.location.href = '/web/index/login.html';
             });
         }
     }
@@ -166,11 +166,11 @@ function initUserDropdown() {
 // ============================================
 function initHeroCarousel() {
     const heroImages = [
-        '/img/pic1.jpg',
-        '/img/pic2.jpg',
-        '/img/pic3.jpg',
-        '/img/pic4.jpg',
-        '/img/pic5.jpg'
+        '/web/img/pic1.jpg',
+        '/web/img/pic2.jpg',
+        '/web/img/pic3.jpg',
+        '/web/img/pic4.jpg',
+        '/web/img/pic5.jpg'
     ];
 
     const heroBg1 = document.querySelector('.hero-bg1');
@@ -243,7 +243,7 @@ function initNavigation() {
                 if (!authToken || !usuarioData) {
                     showNotification('Faça login para realizar um agendamento', 'error');
                     setTimeout(() => {
-                        window.location.href = '/index/login.html';
+                        window.location.href = '/web/index/login.html';
                     }, 1500);
                     return;
                 }
@@ -335,7 +335,7 @@ function initCalendar() {
                 if (!authToken || !usuarioData) {
                     showNotification('Faça login para realizar um agendamento', 'error');
                     setTimeout(() => {
-                        window.location.href = '/index/login.html';
+                        window.location.href = '/web/index/login.html';
                     }, 1500);
                     return;
                 }
@@ -701,7 +701,7 @@ function initServiceCards() {
             if (!authToken || !usuarioData) {
                 showNotification('Faça login para realizar um agendamento', 'error');
                 setTimeout(() => {
-                    window.location.href = '/index/login.html';
+                    window.location.href = '/web/index/login.html';
                 }, 1500);
                 return;
             }
@@ -1120,7 +1120,7 @@ window.selectBarber = function(barberId, barberName) {
     if (!authToken || !usuarioData) {
         showNotification('Faça login para realizar um agendamento', 'error');
         setTimeout(() => {
-            window.location.href = '/index/login.html';
+            window.location.href = '/web/index/login.html';
         }, 1500);
         return;
     }
@@ -1191,7 +1191,7 @@ window.selectServiceForBooking = function(serviceId) {
     if (!authToken || !usuarioData) {
         showNotification('Faça login para realizar um agendamento', 'error');
         setTimeout(() => {
-            window.location.href = '/index/login.html';
+            window.location.href = '/web/index/login.html';
         }, 1500);
         return;
     }

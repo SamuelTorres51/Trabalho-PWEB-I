@@ -362,28 +362,29 @@ erDiagram
 ```
 Trabalho-PWEB-I/
 │
-├── 📂 index/                    # Páginas HTML
-│   ├── home.html               # Página principal (serviços, barbeiros, agendamento)
-│   ├── login.html              # Página de login e cadastro
-│   └── profile.html            # Página de perfil do usuário
-│
-├── 📂 script/                   # Scripts JavaScript
-│   ├── api.js                  # Cliente API (comunicação com back-end)
-│   ├── auth-guard.js           # Proteção de rotas no front-end
-│   ├── home.js                 # Lógica da página home
-│   ├── login.js                # Lógica da página de login
-│   ├── profile.js              # Lógica da página de perfil
-│   └── theme.js                # Gerenciamento de tema claro/escuro
-│
-├── 📂 style/                    # Arquivos CSS
-│   ├── common.css              # Estilos comuns a todas as páginas
-│   ├── home.css                # Estilos específicos da home
-│   ├── login.css               # Estilos específicos do login
-│   └── profile.css             # Estilos específicos do perfil
-│
-├── 📂 img/                      # Imagens e assets
-│   ├── favicon-96x96.png
-│   └── pic1.jpg até pic5.jpg
+├── 📂 web/                      # Front-end (Interface Web)
+│   ├── 📂 index/                # Páginas HTML
+│   │   ├── home.html           # Página principal (serviços, barbeiros, agendamento)
+│   │   ├── login.html          # Página de login e cadastro
+│   │   └── profile.html        # Página de perfil do usuário
+│   │
+│   ├── 📂 script/              # Scripts JavaScript
+│   │   ├── api.js              # Cliente API (comunicação com back-end)
+│   │   ├── auth-guard.js       # Proteção de rotas no front-end
+│   │   ├── home.js             # Lógica da página home
+│   │   ├── login.js            # Lógica da página de login
+│   │   ├── profile.js          # Lógica da página de perfil
+│   │   └── theme.js            # Gerenciamento de tema claro/escuro
+│   │
+│   ├── 📂 style/               # Arquivos CSS
+│   │   ├── common.css          # Estilos comuns a todas as páginas
+│   │   ├── home.css            # Estilos específicos da home
+│   │   ├── login.css           # Estilos específicos do login
+│   │   └── profile.css         # Estilos específicos do perfil
+│   │
+│   └── 📂 img/                  # Imagens e assets
+│       ├── favicon-96x96.png
+│       └── pic1.jpg até pic5.jpg
 │
 ├── 📂 server/                   # Back-end (API)
 │   ├── 📂 src/
@@ -603,7 +604,7 @@ Você pode usar qualquer servidor HTTP estático. Algumas opções:
 ```bash
 # Na raiz do projeto
 python -m http.server 8000
-# Acesse: http://localhost:8000/index/home.html
+# Acesse: http://localhost:8000/web/index/home.html
 ```
 
 **Opção 2: Usando Node.js (http-server)**
@@ -613,18 +614,18 @@ npm install -g http-server
 
 # Na raiz do projeto
 http-server -p 8000
-# Acesse: http://localhost:8000/index/home.html
+# Acesse: http://localhost:8000/web/index/home.html
 ```
 
 **Opção 3: Usando VS Code Live Server**
 - Instale a extensão "Live Server"
-- Clique com botão direito em `index/home.html`
+- Clique com botão direito em `web/index/home.html`
 - Selecione "Open with Live Server"
 
 ### Verificação
 
 1. ✅ Back-end rodando: Acesse `http://localhost:3003/ping` (deve retornar `{"message":"pong"}`)
-2. ✅ Front-end rodando: Acesse `http://localhost:8000/index/login.html`
+2. ✅ Front-end rodando: Acesse `http://localhost:8000/web/index/login.html`
 3. ✅ Banco de dados: Verifique com `docker ps` se o container está ativo
 
 ---

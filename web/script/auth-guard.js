@@ -30,7 +30,7 @@
     // Se não tiver token ou dados do usuário, redireciona para login
     if (!token || !usuario) {
         console.log('Usuário não autenticado. Redirecionando para login...');
-        window.location.href = '/index/login.html';
+        window.location.href = '/web/index/login.html';
         return;
     }
 
@@ -42,7 +42,7 @@
                 console.error('Token inválido ou expirado:', error);
                 localStorage.removeItem('authToken');
                 localStorage.removeItem('usuario');
-                window.location.href = '/index/login.html';
+                window.location.href = '/web/index/login.html';
             });
     }
 })();

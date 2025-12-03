@@ -128,7 +128,7 @@ function initLoginForm() {
 
                 // Redireciona após 1 segundo
                 setTimeout(() => {
-                    window.location.href = 'home.html';
+                    window.location.href = '/web/index/home.html';
                 }, 1000);
             })
             .catch(error => {
@@ -280,7 +280,7 @@ function initCadastroForm() {
 
                 // Redireciona após 1 segundo
                 setTimeout(() => {
-                    window.location.href = 'home.html';
+                    window.location.href = '/web/index/home.html';
                 }, 1000);
             })
             .catch(error => {

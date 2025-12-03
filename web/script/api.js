@@ -74,7 +74,7 @@ class ApiClient {
 
         // Não redireciona se já estiver na página de login
         if (!window.location.pathname.includes('login.html')) {
-            window.location.href = '/index/login.html';
+            window.location.href = '/web/index/login.html';
         }
     }
 
